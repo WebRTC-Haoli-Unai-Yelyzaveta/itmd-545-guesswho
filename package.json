@@ -3,7 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "dstart": "DEBUG=socket-express:* npm start",
     "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WebRTC-Haoli-Unai-Yelyzaveta/itmd-545-guesswho"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -11,6 +16,7 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "socket.io": "^2.3.0"
   }
 }
