@@ -6,6 +6,10 @@
     "dstart": "DEBUG=socket-express:* npm start",
     "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WebRTC-Haoli-Unai-Yelyzaveta/itmd-545-guesswho"
+  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
