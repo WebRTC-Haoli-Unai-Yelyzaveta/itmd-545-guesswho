@@ -1,16 +1,46 @@
+/* general style */
 body {
   padding: 30px;
   font-family: 'Source Serif Pro', serif;
   background-color: #abd1c6;
 }
 
+/* game title */
 #game-name {
   color: #e16162;
   font-family: 'Emilys Candy', cursive;
-  margin: 0 auto;
+  margin: 0 auto 10px auto;
   text-align: center;
 }
 
 #game-name span {
   color: #001e1d;
+}
+
+/* gameboard  */
+
+#gameboard {
+  display: inline-grid;
+  grid-template-columns: repeat(6, 1fr);
+  background-color: #004643;
+}
+
+.board-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px 0px;
+}
+
+.board-item-image {
+  width: 80%;
+  padding: 10px;
+  border: solid 1px #e8e4e6;
+}
+
+.board-item-name {
+  color: #e8e4e6;
+  text-align: center;
+  padding-top: 5px;
 }
