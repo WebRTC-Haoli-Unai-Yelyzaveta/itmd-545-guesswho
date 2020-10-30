@@ -1,8 +1,16 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 30px;
+  font-family: 'Source Serif Pro', serif;
+  background-color: #abd1c6;
 }
 
-a {
-  color: #00B7FF;
+#game-name {
+  color: #e16162;
+  font-family: 'Emilys Candy', cursive;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#game-name span {
+  color: #001e1d;
 }
