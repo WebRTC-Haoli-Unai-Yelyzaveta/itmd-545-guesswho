@@ -5,6 +5,20 @@ body {
   background-color: #abd1c6;
 }
 
+/* game container */
+.game-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* game item */
+.game-item {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
 /* game title */
 #game-name {
   color: #e16162;
@@ -22,24 +36,24 @@ body {
 #gameboard {
   display: inline-grid;
   grid-template-columns: repeat(6, 1fr);
-  background-color: #004643;
 }
 
-.board-item {
+.board-item, #pickedcard {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px 10px 0px;
+  background-color: #004643;
 }
 
-.board-item-image {
+.board-item-image, #pickedcard-image {
   width: 80%;
   padding: 10px;
   border: solid 1px #e8e4e6;
 }
 
-.board-item-name {
+.board-item-name, #pickedcard-name {
   color: #e8e4e6;
   text-align: center;
   padding-top: 5px;
