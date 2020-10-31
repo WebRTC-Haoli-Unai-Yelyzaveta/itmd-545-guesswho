@@ -25,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 
 io.on('connection', function(socket){
-  console.log('Someone connected');
   socket.emit('message', 'hello client!');
 
   socket.on('connected', function(data){
@@ -37,10 +36,10 @@ roomNamespace.on('connection', socket => {
   const roomSocket = socket.nsp;
   console.log('Someone connected');
 
-  roomSocket.emit("message","User successfully connected to the roomNamespace");
+  roomSocket.emit("message",`User successfully connected to ${roomSocket.name}`);
 
   roomSocket.on('connection established', data => {
-    console.log("Client is saying :" + data);
+    console.log("Client is saying : " + data);
   });
 });
 
