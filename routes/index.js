@@ -12,7 +12,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:room([a-z]{3}-[a-z]{4}-[a-z]{3})', function(req, res, next) {
-  res.render('index', { title: `room ${req.params['room']}` });
+  var namespace = req.params['room'];
+  res.render('index', { title: `room ${namespace}`, namespace: namespace});
 })
 
 module.exports = router;
