@@ -6,10 +6,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const io = require('socket.io')();
-
+const roomNamespace = io.of(/^\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/);
 const indexRouter = require('./routes/index');
 
 const app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +23,27 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+
+/*
+io.on('connection', function(socket){
+  socket.emit('message', 'hello client!');
+
+  socket.on('connected', function(data){
+    console.log(data);
+  });
+});
+*/
+roomNamespace.on('connection', socket => {
+  const roomSocket = socket.nsp;
+  console.log('Someone connected');
+
+  roomSocket.emit("message",`User successfully connected to ${roomSocket.name}`);
+
+  socket.on('connected', data => {
+    console.log("Client is saying : " + data);
+  });
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

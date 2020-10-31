@@ -1,7 +1,16 @@
+var roomSocket = io('/' + NAMESPACE);
+/*
 var socket = io.connect("/");
 
+socket.on('message', function(data){
+  console.log('Connected...');
+  socket.emit('connected', 'hello server!');
+});
+*/
+roomSocket.on('message', data => {
+  console.log('Message received: ' + data);
 
-socket.on("message", function(data) {
-  console.log("Message from server received!");
-
+  //if (data == 'User successfully connected to the roomNamespace'){
+  roomSocket.emit('connected', "Yeah I'm here");
+  //}
 });
