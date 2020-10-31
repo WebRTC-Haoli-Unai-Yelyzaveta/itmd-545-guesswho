@@ -1,6 +1,6 @@
 //game part
 //create a name array for tracking
-const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","SAMANTHA","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
+const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
   const gameboard = document.getElementById('gameboard');
