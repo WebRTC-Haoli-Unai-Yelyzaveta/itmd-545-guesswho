@@ -1,6 +1,6 @@
 'use strict';
 
-var roomSocket = io('/aaa-aaaa-aaa');
+var roomSocket = io('/' + NAMESPACE);
 var socket = io.connect("/");
 
 socket.on('message', function(data){
@@ -11,8 +11,7 @@ socket.on('message', function(data){
 roomSocket.on('message', data => {
   console.log('Message received: ' + data);
 
-  if (data == "User successfully connected to the roomNamespace"){
+  if (data == 'User successfully connected to the roomNamespace'){
     roomSocket.emit('connection established', "Yeah I'm here");
-  }
-
+}
 });
