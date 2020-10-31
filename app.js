@@ -39,4 +39,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+io.on("connection", socket => {
+  console.log("Someone connected!");
+  socket.emit("message");
+})
+
 module.exports = {app, io};
