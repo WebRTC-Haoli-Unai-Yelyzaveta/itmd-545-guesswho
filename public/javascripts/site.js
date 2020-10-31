@@ -1,3 +1,4 @@
+
 //game part
 //create a name array for tracking
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
@@ -24,3 +25,21 @@ function generateGameboard() {
 }
 
 generateGameboard();
+
+//socket connection
+var roomSocket = io('/' + NAMESPACE);
+/*
+var socket = io.connect("/");
+
+socket.on('message', function(data){
+  console.log('Connected...');
+  socket.emit('connected', 'hello server!');
+});
+*/
+roomSocket.on('message', data => {
+  console.log('Message received: ' + data);
+
+  //if (data == 'User successfully connected to the roomNamespace'){
+  roomSocket.emit('connected', "Yeah I'm here");
+  //}
+});
