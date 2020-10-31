@@ -1,8 +1,144 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@media (min-width: 480px) {
+  /* general style */
+  body {
+    padding: 2em;
+    font-family: 'Source Serif Pro', serif;
+    background-color: #abd1c6;
+  }
+
+  /* game title */
+  #game-name {
+    color: #e16162;
+    font-family: 'Emilys Candy', cursive;
+    margin: 0 auto 0.5em auto;
+    text-align: center;
+  }
+
+  #game-name span {
+    color: #001e1d;
+  }
+
+  /* game container */
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  /* game item */
+  .game-item {
+    margin-bottom: 0.5em;
+  }
+
+  /* gameboard  */
+  #gameboard {
+    display: inline-grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .board-item, #pickedcard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3em 0.3em 0 0.3em;
+    background-color: #004643;
+  }
+
+  .board-item-image {
+    width: 80%;
+    padding: 0.2em;
+    border: solid 1px #e8e4e6;
+  }
+
+  #pickedcard-image {
+    width: 80px;
+    padding: 0.25em;
+    margin: 0.15em;
+    border: solid 1px #e8e4e6;
+  }
+
+  .board-item-name, #pickedcard-name {
+    color: #e8e4e6;
+    text-align: center;
+    padding-top: 0.25em;
+  }
 }
 
-a {
-  color: #00B7FF;
+@media (min-width: 768px) {
+  /* game title */
+  #game-name {
+    font-size: 3em;
+  }
+
+  /* game item */
+  .game-item {
+    margin-bottom: 1.5em;
+  }
+
+  /* gameboard  */
+  .board-item-name, #pickedcard-name {
+    font-size: 1.2em;
+  }
+
+  .board-item, #pickedcard {
+    padding-top: 0.8em;
+  }
+
+  #pickedcard-image {
+    width: 140px;
+    margin-left: 0.6em;
+    margin-right: 0.6em;
+  }
+}
+
+@media (min-width: 992px) {
+
+  /* general style */
+  body {
+    padding: 2em 5em;
+  }
+
+  /* gameboard  */
+  #gameboard {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+}
+
+@media (min-width: 1200px) {
+
+  /* game title */
+  #game-name {
+    font-size: 5em;
+  }
+
+  /* game container */
+  .game-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  /* game item */
+  .game-item {
+    margin-bottom: 0;
+    margin-left: 3em;
+    margin-right: 3em;
+  }
+
+  /* gameboard  */
+  #gameboard {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .board-item-name, #pickedcard-name {
+    font-size: 1.2em;
+  }
+
+  #pickedcard-image {
+    width: 70%;
+  }
 }
