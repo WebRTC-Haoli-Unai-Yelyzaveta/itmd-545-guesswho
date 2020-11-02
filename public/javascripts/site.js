@@ -53,8 +53,12 @@ streamButton.addEventListener('click', function(e) {
 });
 
 async function startStream(){
-  stream = await navigator.mediaDevices.getUserMedia(constraints);
-  var selfStream = document.querySelector('#self-video');
-  selfStream.srcObject = stream;
+  try{
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    var selfStream = document.querySelector('#self-video');
+    selfStream.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
 
 }
