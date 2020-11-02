@@ -27,7 +27,31 @@ function generateGameboard() {
   }
 
 alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+
+var k=Math.floor((Math.random() * 19) + 1);
+
+const cat = document.createElement('div');
+//cat.className = "board-item";
+const charImage = document.createElement('img');
+charImage.className = "board-item-image";
+//append image source from RoboHash API
+charImage.src = `https://robohash.org/${charNameArr[k]}?set=set4`;
+const charName = document.createElement('div');
+//charName.className = "board-item-name";
+//add character's name
+const name = document.createTextNode(charNameArr[k]);
+//charName.appendChild(name);
+cat.appendChild(charImage);
+//cat.appendChild(charName);
+gameboard.appendChild(cat);
+
+
+  const t = document.createTextNode("You chosen character is "+ charNameArr[k]);
+ document.body.appendChild(t);
+
 }
+
+
 
 generateGameboard();
 

@@ -6,18 +6,20 @@ block content
     | Guess
     span Who?
 
-    form(action='/add_movie', method='POST')
+    form(action='/add_guess', method='POST')
     p
       | Ready to make your guess? Type in your answer.
       input(type='text', name='guess', value='')
     input(type='submit', value='Submit')
 
+    p
+      | SCORE: 0 : 0
 
   div.game-container
     div#gameboard.game-item
-    div#pickedcard.game-item
-      img#pickedcard-image(src='https://via.placeholder.com/282/e8e4e6/000000?text=?????')
-      div#pickedcard-name ??????
+
+
+
 
 
 
