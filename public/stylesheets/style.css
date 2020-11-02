@@ -6,10 +6,27 @@
     background-color: #abd1c6;
   }
   p{
-font-size: 14px;
+font-size: 12px;
 
   }
+#button{
+  display: inline;
+  margin: 0.5%;
+border-style: solid;
+padding: 0.2%;
+ border-width: 0.7px;
+ cursor:pointer;
 
+}
+.button{
+  display: inline;
+    margin: 0.5%;
+border-style: solid;
+padding: 0.2%;
+ border-width: 0.7px;
+ cursor:pointer;
+
+}
 
   /* game title */
   #game-name {
