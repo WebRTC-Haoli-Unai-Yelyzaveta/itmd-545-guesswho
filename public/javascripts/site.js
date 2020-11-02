@@ -47,13 +47,14 @@ sigCh.on('message', data => {
 
 var streamButton = document.querySelector('#start-stream');
 const constraints = {video:true, audio:true}
-streamButton.addEventListener('click', function(e) {
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then(stream => {
-      var selfStream = document.querySelector('#self-video');
-      selfStream.srcObject = stream;
 
-    }).catch(function(error){
-      console.error(error);
-    });
-})
+streamButton.addEventListener('click', function(e) {
+  startStream();
+});
+
+async function startStream(){
+  stream = await navigator.mediaDevices.getUserMedia(constraints);
+  var selfStream = document.querySelector('#self-video');
+  selfStream.srcObject = stream;
+
+}
