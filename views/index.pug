@@ -1,6 +1,14 @@
 extends layout
 
 block content
+  main#content
+    figure.streams
+      video(
+        id = 'self-video'
+        autoplay
+        playsinline
+      )
+      button#start-stream  Start Stream
 
 
   h1#game-name

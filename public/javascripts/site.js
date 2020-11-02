@@ -34,7 +34,7 @@ alert("Hello! Let me teach you how to play the game. You and the other player bo
 generateGameboard();
 
 //socket connection
-var roomSocket = io('/' + NAMESPACE);
+var sigCh = io('/' + NAMESPACE);
 /*
 var socket = io.connect("/");
 
@@ -43,10 +43,29 @@ socket.on('message', function(data){
   socket.emit('connected', 'hello server!');
 });
 */
-roomSocket.on('message', data => {
+sigCh.on('message', data => {
   console.log('Message received: ' + data);
 
   //if (data == 'User successfully connected to the roomNamespace'){
-  roomSocket.emit('connected', "Yeah I'm here");
+  sigCh.emit('connected', "Yeah I'm here");
   //}
 });
+
+
+var streamButton = document.querySelector('#start-stream');
+const constraints = {video:true, audio:true}
+
+streamButton.addEventListener('click', function(e) {
+  startStream();
+});
+
+async function startStream(){
+  try{
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    var selfStream = document.querySelector('#self-video');
+    selfStream.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
+
+}
