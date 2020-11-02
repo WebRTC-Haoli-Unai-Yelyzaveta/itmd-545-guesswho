@@ -1,7 +1,15 @@
 extends layout
 
 block content
-
+  main#content
+    figure.streams
+      video(
+        id = 'self-video'
+        autoplay
+        playsinline
+      )
+      button#start-camera  Start Camera
+      
   h1#game-name
     | Guess
     span Who?
