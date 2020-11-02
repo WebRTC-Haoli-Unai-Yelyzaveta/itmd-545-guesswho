@@ -27,7 +27,7 @@ function generateGameboard() {
 generateGameboard();
 
 //socket connection
-var roomSocket = io('/' + NAMESPACE);
+var sigCh = io('/' + NAMESPACE);
 /*
 var socket = io.connect("/");
 
@@ -36,10 +36,10 @@ socket.on('message', function(data){
   socket.emit('connected', 'hello server!');
 });
 */
-roomSocket.on('message', data => {
+sigCh.on('message', data => {
   console.log('Message received: ' + data);
 
   //if (data == 'User successfully connected to the roomNamespace'){
-  roomSocket.emit('connected', "Yeah I'm here");
+  sigCh.emit('connected', "Yeah I'm here");
   //}
 });

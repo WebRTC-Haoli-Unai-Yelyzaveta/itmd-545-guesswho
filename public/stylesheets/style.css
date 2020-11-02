@@ -142,3 +142,15 @@
     width: 70%;
   }
 }
+
+img,
+audio,
+video{
+  display: block;
+  max-width: 100%;
+  border: 1px solid black;
+}
+
+.streams{
+    position: relative;
+}
