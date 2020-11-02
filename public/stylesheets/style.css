@@ -5,6 +5,10 @@
     font-family: 'Source Serif Pro', serif;
     background-color: #abd1c6;
   }
+  p{
+font-size: 14px;
+
+  }
 
   /* game title */
   #game-name {
@@ -47,6 +51,7 @@
   }
 
   .board-item-image {
+    cursor: pointer;
     width: 80%;
     padding: 0.2em;
     border: solid 1px #e8e4e6;

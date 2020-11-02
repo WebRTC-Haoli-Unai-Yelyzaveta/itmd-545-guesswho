@@ -5,10 +5,21 @@ block content
   h1#game-name
     | Guess
     span Who?
+
+    form(action='/add_movie', method='POST')
+    p
+      | Ready to make your guess? Type in your answer.
+      input(type='text', name='guess', value='')
+    input(type='submit', value='Submit')
+
+
   div.game-container
     div#gameboard.game-item
     div#pickedcard.game-item
       img#pickedcard-image(src='https://via.placeholder.com/282/e8e4e6/000000?text=?????')
       div#pickedcard-name ??????
+
+
+
   script.
     window.NAMESPACE = "#{namespace}";
