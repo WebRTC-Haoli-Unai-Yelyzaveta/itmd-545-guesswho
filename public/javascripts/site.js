@@ -4,6 +4,8 @@
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
+
+
   const gameboard = document.getElementById('gameboard');
   //generate boxes for 24 characters
   for (let i = 0; i < charNameArr.length; i++) {
@@ -21,8 +23,13 @@ function generateGameboard() {
     box.appendChild(charImage);
     box.appendChild(charName);
     gameboard.appendChild(box);
+
   }
+
+alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+
 }
+
 
 generateGameboard();
 
