@@ -39,7 +39,7 @@ var sigCh = io('/' + NAMESPACE);
 
 //Listen for 'message' event on the signaling channel
 sigCh.on('message', data => {
-  console.log('Message received: ' + data);
+  console.log(data);
 });
 
 
