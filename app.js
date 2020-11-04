@@ -34,13 +34,28 @@ io.on('connection', function(socket){
 });
 */
 roomNamespace.on('connection', socket => {
+  //roomSocket is only going to be used for diagnosis
+  //Emitting and listening for events should be
+  //done on the 'socket' object
   const roomSocket = socket.nsp;
   console.log('Someone connected');
 
   roomSocket.emit("message",`User successfully connected to ${roomSocket.name}`);
-
+  /*
   socket.on('connected', data => {
     console.log("Client is saying : " + data);
+  });*/
+
+  //Handle calling event from one peer to the other
+  socket.on('calling', function() {
+    socket.broadcast.emit('calling');
+  });
+
+  //Handle signaling events
+  socket.on('signal', function({description, candidate}) {
+    console.log(`Received a signal from ${socket.id}`);
+    console.log({description, candidate});
+    socket.broadcast.emit('signal', {description, candidate});
   });
 });
 
