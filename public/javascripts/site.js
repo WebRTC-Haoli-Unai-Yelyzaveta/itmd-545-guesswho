@@ -33,31 +33,24 @@ alert("Hello! Let me teach you how to play the game. You and the other player bo
 
 generateGameboard();
 
-//socket connection
+//socket connection to the signaling channel
+//between both peers
 var sigCh = io('/' + NAMESPACE);
-/*
-var socket = io.connect("/");
 
-socket.on('message', function(data){
-  console.log('Connected...');
-  socket.emit('connected', 'hello server!');
-});
-*/
+//Listen for 'message' event on the signaling channel
 sigCh.on('message', data => {
   console.log('Message received: ' + data);
-
-  //if (data == 'User successfully connected to the roomNamespace'){
-  sigCh.emit('connected', "Yeah I'm here");
-  //}
 });
 
 
 var streamButton = document.querySelector('#start-stream');
 const constraints = {video:true, audio:true}
 
+//Listen for 'click' event on the #start-stream button
 streamButton.addEventListener('click', function(e) {
   startStream();
 });
+
 
 async function startStream(){
   try{
