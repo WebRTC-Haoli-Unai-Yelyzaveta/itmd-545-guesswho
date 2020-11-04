@@ -24,15 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
-/*
-io.on('connection', function(socket){
-  socket.emit('message', 'hello client!');
 
-  socket.on('connected', function(data){
-    console.log(data);
-  });
-});
-*/
 roomNamespace.on('connection', socket => {
   //roomSocket is only going to be used for diagnosis
   //Emitting and listening for events should be
@@ -40,11 +32,8 @@ roomNamespace.on('connection', socket => {
   const roomSocket = socket.nsp;
   console.log('Someone connected');
 
-  roomSocket.emit("message",`User successfully connected to ${roomSocket.name}`);
-  /*
-  socket.on('connected', data => {
-    console.log("Client is saying : " + data);
-  });*/
+  //Send diagnostic message to confirm connection
+  socket.emit("message",`User successfully connected to ${roomSocket.name}`);
 
   //Handle calling event from one peer to the other
   socket.on('calling', function() {
@@ -76,10 +65,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
-io.on("connection", socket => {
-  console.log("Someone connected!");
-  socket.emit("message");
-})
 
 module.exports = {app, io};
