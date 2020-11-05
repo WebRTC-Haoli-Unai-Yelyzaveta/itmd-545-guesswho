@@ -39,12 +39,12 @@ const sigCh = io('/' + NAMESPACE);
 var config = null;
 const pc = new RTCPeerConnection(config);
 
-//Vatiables for self video
+//Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
 selfVideo.Object = selfStream;
 
-//Vatiables for remote video from the peer
+//Variables for remote video from the peer
 const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
 remoteVideo.Object = remoteStream;
@@ -59,10 +59,26 @@ sigCh.on('message', data => {
 
 
 //Listen for 'click' event on the #start-stream button
-callButton.addEventListener('click', function(e) {
-  startStream();
-});
+callButton.addEventListener('click', startCall);
 
+function startCall() {
+  console.log("I'm starting the call...");
+  callButton.hidden = true;
+  //ClientIs.polite = true;
+  sigCh.emit('calling');
+  startStream();
+}
+
+sigCh.on('calling', function() {
+  console.log("Someone is calling me!");
+  callButton.innerText = "Answer Call";
+  callButton.id = "answer";
+  callButton.removeEventListener('click', startCall);
+  callButton.addEventListener('click', function(){
+    callButton.hidden = true;
+    startStream();
+  });
+});
 
 async function startStream(){
   try{
@@ -76,7 +92,6 @@ async function startStream(){
   }catch{
     console.log('Error');
   }
-
 }
 
 //Handle received tracks by the RTCPeerConnection channel
