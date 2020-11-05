@@ -49,7 +49,7 @@ const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
 remoteVideo.Object = remoteStream;
 
-var streamButton = document.querySelector('#start-stream');
+var callButton = document.querySelector('#start-call');
 const constraints = {video:true, audio:true}
 
 //Listen for 'message' event on the signaling channel
@@ -59,12 +59,9 @@ sigCh.on('message', data => {
 
 
 //Listen for 'click' event on the #start-stream button
-streamButton.addEventListener('click', function(e) {
+callButton.addEventListener('click', function(e) {
   startStream();
 });
-
-
-
 
 
 async function startStream(){
@@ -81,3 +78,18 @@ async function startStream(){
   }
 
 }
+
+//Handle received tracks by the RTCPeerConnection channel
+pc.ontrack = function(track) {
+  peerStream.addTrack(track.track);
+}
+/* HOW THEY DO IT IN THE PERFECT NEGOTIATION ARTICLE
+pc.ontrack = ({track, streams}) => {
+  track.onunmute = () => {
+    if (remoteVideo.srcObject) {
+      return;
+    }
+    remoteVideo.srcObject = streams[0];
+  };
+};
+*/
