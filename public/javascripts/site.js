@@ -165,3 +165,8 @@ async function receivedSignal({description, candidate}) {
     console.error(err);
   }
 }
+
+//Logic to send candidate
+pc.onicecandidate = ({candidate}) => {
+  sigCh.emit('signal', {candidate:candidate});
+}
