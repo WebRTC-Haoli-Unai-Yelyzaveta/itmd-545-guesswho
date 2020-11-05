@@ -104,7 +104,7 @@ async function startStream(){
 
 //Handle received tracks by the RTCPeerConnection channel
 pc.ontrack = function(track) {
-  peerStream.addTrack(track.track);
+  remoteStream.addTrack(track.track);
 }
 /* HOW THEY DO IT IN THE PERFECT NEGOTIATION ARTICLE
 pc.ontrack = ({track, streams}) => {
@@ -128,5 +128,39 @@ async function startNegotiation() {
     } finally {
       clientState.makingOffer = false;
     }
+  }
+}
+
+sigCh.on('signal', receivedSignal);
+
+async function receivedSignal({description, candidate}) {
+  try{
+    if(description) {
+      console.log("I just received a description...");
+      const offerCollision = (description.type == "offer") &&
+                             (clientState.makingOffer || pc.signalingState != "stable");
+
+      clientState.ignoringOffer = !clientState.polite && offerCollision;
+      //Leave if client is ignoring offers
+      if(clientState.ignoringOffer){
+        return;
+      }
+
+      //Set the remote description
+      await pc.setRemoteDescription(description);
+
+      //send an answer if it's an offer
+      if(description.type == "offer"){
+        console.log("It was an offer! Let me answer...");
+        await pc.setLocalDescription();
+        sigCh.emit("signal", {description: pc.localDescription});
+      }
+    }else if(candidate){
+      console.log('I just received a candidate...');
+      console.log(candidate);
+      await pc.addIceCandidate(candidate);
+    }
+  }catch(err){
+    console.error(err);
   }
 }
