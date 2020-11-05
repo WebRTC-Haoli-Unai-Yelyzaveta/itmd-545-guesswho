@@ -73,6 +73,7 @@ function startCall() {
   //ClientIs.polite = true;
   sigCh.emit('calling');
   startStream();
+  startNegotiation();
 }
 
 sigCh.on('calling', function() {
@@ -83,6 +84,7 @@ sigCh.on('calling', function() {
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
     startStream();
+    startNegotiation();
   });
 });
 
@@ -114,3 +116,17 @@ pc.ontrack = ({track, streams}) => {
   };
 };
 */
+
+async function startNegotiation() {
+  pc.onnegotiationneeded = async () => {
+    try {
+      clientState.makingOffer = true;
+      await pc.setLocalDescription();
+      sigCh.emit('signal',{ description: pc.localDescription });
+    } catch(err) {
+      console.error(err);
+    } finally {
+      clientState.makingOffer = false;
+    }
+  }
+}
