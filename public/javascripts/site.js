@@ -35,6 +35,7 @@ generateGameboard();
 
 //socket connection to the signaling channel
 //between both peers
+
 const sigCh = io('/' + NAMESPACE);
 var rtc_config = null;
 const pc = new RTCPeerConnection(rtc_config);
@@ -58,6 +59,7 @@ var clientState = {
   ignoringOffer: false
 }
 
+
 //Listen for 'message' event on the signaling channel
 sigCh.on('message', data => {
   console.log(data);
@@ -67,11 +69,13 @@ sigCh.on('message', data => {
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
 
+
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
   clientState.polite = true;
   sigCh.emit('calling');
+
   startStream();
   startNegotiation();
 }
@@ -87,6 +91,7 @@ sigCh.on('calling', function() {
     startNegotiation();
   });
 });
+
 
 async function startStream(){
   try{
