@@ -36,8 +36,8 @@ generateGameboard();
 //socket connection to the signaling channel
 //between both peers
 const sigCh = io('/' + NAMESPACE);
-var config = null;
-const pc = new RTCPeerConnection(config);
+var rtc_config = null;
+const pc = new RTCPeerConnection(rtc_config);
 
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
@@ -51,6 +51,12 @@ remoteVideo.Object = remoteStream;
 
 var callButton = document.querySelector('#start-call');
 const constraints = {video:true, audio:true}
+
+var clientState = {
+  makingOffer: false,
+  polite: false,
+  ignoringOffer: false
+}
 
 //Listen for 'message' event on the signaling channel
 sigCh.on('message', data => {
