@@ -42,15 +42,15 @@ const pc = new RTCPeerConnection(rtc_config);
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
-selfVideo.Object = selfStream;
+selfVideo.srcObject = selfStream;
 
 //Variables for remote video from the peer
 const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
-remoteVideo.Object = remoteStream;
+remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
-const constraints = {video:true, audio:true}
+const constraints = {video:true, audio:false}
 
 var clientState = {
   makingOffer: false,
@@ -70,7 +70,7 @@ callButton.addEventListener('click', startCall);
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
-  //ClientIs.polite = true;
+  clientState.polite = true;
   sigCh.emit('calling');
   startStream();
   startNegotiation();
@@ -105,6 +105,7 @@ async function startStream(){
 
 //Handle received tracks by the RTCPeerConnection channel
 pc.ontrack = function(track) {
+  console.log("RECEIVED TRACK!");
   remoteStream.addTrack(track.track);
 }
 /* HOW THEY DO IT IN THE PERFECT NEGOTIATION ARTICLE
@@ -121,6 +122,7 @@ pc.ontrack = ({track, streams}) => {
 async function startNegotiation() {
   pc.onnegotiationneeded = async () => {
     try {
+      console.log('making an offer...');
       clientState.makingOffer = true;
       await pc.setLocalDescription();
       sigCh.emit('signal',{ description: pc.localDescription });
@@ -132,8 +134,38 @@ async function startNegotiation() {
   }
 }
 
-sigCh.on('signal', receivedSignal);
+sigCh.on('signal', async function({description, candidate}) {
+  try{
+    if(description) {
+      console.log("I just received a description...");
+      const offerCollision = (description.type == 'offer') &&
+                             (clientState.makingOffer || pc.signalingState != "stable");
 
+      clientState.ignoringOffer = !clientState.polite && offerCollision;
+      //Leave if client is ignoring offers
+      if(clientState.ignoringOffer){
+        return;
+      }
+
+      //Set the remote description
+      await pc.setRemoteDescription(description);
+
+      //send an answer if it's an offer
+      if(description.type == 'offer'){
+        console.log("It was an offer! Let me answer...");
+        await pc.setLocalDescription();
+        sigCh.emit('signal', {description: pc.localDescription});
+      }
+    }else if(candidate){
+      console.log('I just received a candidate...');
+      console.log(candidate);
+      await pc.addIceCandidate(candidate);
+    }
+  }catch(err){
+    console.error(err);
+  }
+});
+/*
 async function receivedSignal({description, candidate}) {
   try{
     if(description) {
@@ -165,6 +197,7 @@ async function receivedSignal({description, candidate}) {
     console.error(err);
   }
 }
+*/
 
 //Logic to send candidate
 pc.onicecandidate = ({candidate}) => {
