@@ -4,11 +4,16 @@ block content
   main#content
     figure.streams
       video(
-        id = 'self-video'
+        id="self-video"
         autoplay
         playsinline
       )
-      button#start-stream  Start Stream
+      video(
+        id="remote-video"
+        autoplay
+      )
+      figcaption
+        button#start-call  Start call
 
 
   h1#game-name

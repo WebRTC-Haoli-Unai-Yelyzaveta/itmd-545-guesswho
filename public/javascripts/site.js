@@ -35,7 +35,30 @@ generateGameboard();
 
 //socket connection to the signaling channel
 //between both peers
-var sigCh = io('/' + NAMESPACE);
+
+const sigCh = io('/' + NAMESPACE);
+var rtc_config = null;
+const pc = new RTCPeerConnection(rtc_config);
+
+//Variables for self video
+const selfVideo = document.querySelector('#self-video');
+var selfStream = new MediaStream();
+selfVideo.srcObject = selfStream;
+
+//Variables for remote video from the peer
+const remoteVideo = document.querySelector('#remote-video');
+var remoteStream = new MediaStream();
+remoteVideo.srcObject = remoteStream;
+
+var callButton = document.querySelector('#start-call');
+const constraints = {video:true, audio:false}
+
+var clientState = {
+  makingOffer: false,
+  polite: false,
+  ignoringOffer: false
+}
+
 
 //Listen for 'message' event on the signaling channel
 sigCh.on('message', data => {
@@ -43,22 +66,145 @@ sigCh.on('message', data => {
 });
 
 
-var streamButton = document.querySelector('#start-stream');
-const constraints = {video:true, audio:true}
-
 //Listen for 'click' event on the #start-stream button
-streamButton.addEventListener('click', function(e) {
+callButton.addEventListener('click', startCall);
+
+
+function startCall() {
+  console.log("I'm starting the call...");
+  callButton.hidden = true;
+  clientState.polite = true;
+  sigCh.emit('calling');
+
   startStream();
+  startNegotiation();
+}
+
+sigCh.on('calling', function() {
+  console.log("Someone is calling me!");
+  callButton.innerText = "Answer Call";
+  callButton.id = "answer";
+  callButton.removeEventListener('click', startCall);
+  callButton.addEventListener('click', function(){
+    callButton.hidden = true;
+    startStream();
+    startNegotiation();
+  });
 });
 
 
 async function startStream(){
   try{
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    var selfStream = document.querySelector('#self-video');
-    selfStream.srcObject = stream;
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    for(var track of stream.getTracks()){
+      pc.addTrack(track);
+      //selfVideo.srcObject = selfStream.addTrack(track.track); --> Not working
+      //selfVideo.srcObject = track.track; --> Not working
+    }
+    //TODO: Handle selfVideo with tracks
+    selfVideo.srcObject = stream;
   }catch{
     console.log('Error');
   }
+}
 
+//Handle received tracks by the RTCPeerConnection channel
+pc.ontrack = function(track) {
+  console.log("RECEIVED TRACK!");
+  remoteStream.addTrack(track.track);
+}
+/* HOW THEY DO IT IN THE PERFECT NEGOTIATION ARTICLE
+pc.ontrack = ({track, streams}) => {
+  track.onunmute = () => {
+    if (remoteVideo.srcObject) {
+      return;
+    }
+    remoteVideo.srcObject = streams[0];
+  };
+};
+*/
+
+async function startNegotiation() {
+  pc.onnegotiationneeded = async () => {
+    try {
+      console.log('making an offer...');
+      clientState.makingOffer = true;
+      await pc.setLocalDescription();
+      sigCh.emit('signal',{ description: pc.localDescription });
+    } catch(err) {
+      console.error(err);
+    } finally {
+      clientState.makingOffer = false;
+    }
+  }
+}
+
+sigCh.on('signal', async function({description, candidate}) {
+  try{
+    if(description) {
+      console.log("I just received a description...");
+      const offerCollision = (description.type == 'offer') &&
+                             (clientState.makingOffer || pc.signalingState != "stable");
+
+      clientState.ignoringOffer = !clientState.polite && offerCollision;
+      //Leave if client is ignoring offers
+      if(clientState.ignoringOffer){
+        return;
+      }
+
+      //Set the remote description
+      await pc.setRemoteDescription(description);
+
+      //send an answer if it's an offer
+      if(description.type == 'offer'){
+        console.log("It was an offer! Let me answer...");
+        await pc.setLocalDescription();
+        sigCh.emit('signal', {description: pc.localDescription});
+      }
+    }else if(candidate){
+      console.log('I just received a candidate...');
+      console.log(candidate);
+      await pc.addIceCandidate(candidate);
+    }
+  }catch(err){
+    console.error(err);
+  }
+});
+/*
+async function receivedSignal({description, candidate}) {
+  try{
+    if(description) {
+      console.log("I just received a description...");
+      const offerCollision = (description.type == "offer") &&
+                             (clientState.makingOffer || pc.signalingState != "stable");
+
+      clientState.ignoringOffer = !clientState.polite && offerCollision;
+      //Leave if client is ignoring offers
+      if(clientState.ignoringOffer){
+        return;
+      }
+
+      //Set the remote description
+      await pc.setRemoteDescription(description);
+
+      //send an answer if it's an offer
+      if(description.type == "offer"){
+        console.log("It was an offer! Let me answer...");
+        await pc.setLocalDescription();
+        sigCh.emit("signal", {description: pc.localDescription});
+      }
+    }else if(candidate){
+      console.log('I just received a candidate...');
+      console.log(candidate);
+      await pc.addIceCandidate(candidate);
+    }
+  }catch(err){
+    console.error(err);
+  }
+}
+*/
+
+//Logic to send candidate
+pc.onicecandidate = ({candidate}) => {
+  sigCh.emit('signal', {candidate:candidate});
 }

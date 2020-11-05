@@ -166,14 +166,29 @@ padding: 0.2%;
   }
 }
 
-img,
-audio,
-video{
-  display: block;
-  max-width: 100%;
-  border: 1px solid black;
-}
 
-.streams{
-    position: relative;
+#content {
+  box-sizing: border-box;
+  padding-top: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.videos {
+  position: relative;
+}
+.videos figcaption {
+  padding: 12px;
+}
+video {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #222;
+  border: 1px solid #DDD;
+}
+#self-video {
+  position: absolute;
+  width: 20%;
+  top: 12px;
+  right: 12px;
 }
