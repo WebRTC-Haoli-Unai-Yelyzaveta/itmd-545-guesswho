@@ -35,7 +35,22 @@ generateGameboard();
 
 //socket connection to the signaling channel
 //between both peers
-var sigCh = io('/' + NAMESPACE);
+const sigCh = io('/' + NAMESPACE);
+var config = null;
+const pc = new RTCPeerConnection(config);
+
+//Vatiables for self video
+const selfVideo = document.querySelector('#self-video');
+var selfStream = new MediaStream();
+selfVideo.Object = selfStream;
+
+//Vatiables for remote video from the peer
+const remoteVideo = document.querySelector('#remote-video');
+var remoteStream = new MediaStream();
+remoteVideo.Object = remoteStream;
+
+var streamButton = document.querySelector('#start-stream');
+const constraints = {video:true, audio:true}
 
 //Listen for 'message' event on the signaling channel
 sigCh.on('message', data => {
@@ -43,20 +58,24 @@ sigCh.on('message', data => {
 });
 
 
-var streamButton = document.querySelector('#start-stream');
-const constraints = {video:true, audio:true}
-
 //Listen for 'click' event on the #start-stream button
 streamButton.addEventListener('click', function(e) {
   startStream();
 });
 
 
+
+
+
 async function startStream(){
   try{
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    var selfStream = document.querySelector('#self-video');
-    selfStream.srcObject = stream;
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    for(var track of stream.getTracks()){
+      pc.addTrack(track);
+
+    }
+    //TODO: Handle selfVideo with tracks
+    selfVideo.srcObject = stream;
   }catch{
     console.log('Error');
   }
