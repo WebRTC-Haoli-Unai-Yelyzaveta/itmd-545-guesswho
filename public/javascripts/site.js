@@ -50,7 +50,11 @@ var clientState = {
   ignoringOffer: false
 }
 
-
+// Add DOM elements for the data channel
+var chatArea = document.querySelector('.chat-area');
+var chatForm = document.querySelector('.chat-form');
+var chatInput = document.querySelector('#chat-input');
+var chatBtn = document.querySelector('#chat-btn');
 
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
