@@ -16,6 +16,7 @@ block content
         button#start-call  Start call
 
 
+
   h1#game-name
     | Guess
     span Who?
@@ -84,6 +85,12 @@ block content
   div.game-container
     div#gameboard.game-item
 
+  div.chat-container
+    ul.chat-area
+    .chat-box
+      form.chat-form
+        input#chat-input(placeholder='Type your message...')
+        button#chat-btn(type='submit') Send
 
   script.
     window.NAMESPACE = "#{namespace}";
