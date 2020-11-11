@@ -40,6 +40,18 @@ const sigCh = io('/' + NAMESPACE);
 var rtc_config = null;
 const pc = new RTCPeerConnection(rtc_config);
 
+// Set the placeholder for the data channel
+var dc = null;
+
+// Track client states
+var clientState = {
+  makingOffer: false,
+  polite: false,
+  ignoringOffer: false
+}
+
+
+
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
@@ -52,12 +64,6 @@ remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
 const constraints = {video:true, audio:false}
-
-var clientState = {
-  makingOffer: false,
-  polite: false,
-  ignoringOffer: false
-}
 
 
 //Listen for 'message' event on the signaling channel
