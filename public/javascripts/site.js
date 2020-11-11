@@ -56,6 +56,15 @@ var chatForm = document.querySelector('.chat-form');
 var chatInput = document.querySelector('#chat-input');
 var chatBtn = document.querySelector('#chat-btn');
 
+// A function to append message to the chat box chat box area
+function appendMsgToChatArea(area, msg, who) {
+  var li = document.createElement('li');
+  var msg = document.createTextNode(msg);
+  li.className = who;
+  li.appendChild(msg);
+  area.appendChild(li);
+}
+
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
