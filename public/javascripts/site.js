@@ -65,6 +65,50 @@ function appendMsgToChatArea(area, msg, who) {
   area.appendChild(li);
 }
 
+// A function to listen for the data channel event
+function addDataChannelEventListener(datachannel) {
+  datachannel.onmessage = (e) => {
+    appendMsgToChatArea(chatArea, e.data, 'peer');
+  }
+
+  datachannel.onopen = () => {
+    chatInput.disabled = false;
+    chatBtn.disabled = false;
+  }
+
+  datachannel.onclose = () => {
+    chatInput.disabled = true;
+    chatBtn.disabled = true;
+  }
+
+  // Send chat messages from the self side
+  chatForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var msg = chatInput.value;
+    appendMsgToChatArea(chatArea, msg, 'self');
+    datachannel.send(msg);
+    chatInput.value = '';
+  })
+}
+
+// the polite client will open the data channel once the connection state become 'connected'
+pc.onconnectionstatechange = (e) => {
+  if(pc.connectionState == 'connected') {
+    if (clientState.polite) {
+      // console.log('data channel starts');
+      dc = pc.createDataChannel('text chat');
+      addDataChannelEventListener(dc);
+    }
+  }
+}
+
+// Listen for the data channel on the peer side
+pc.ondatachannel = (e) => {
+  // console.log('Heard data channel open...');
+  dc = e.channel;
+  addDataChannelEventListener(dc);
+}
+
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
