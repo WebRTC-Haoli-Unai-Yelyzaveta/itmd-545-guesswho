@@ -4,8 +4,7 @@
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
-
-
+    var firstTime = true;
   const gameboard = document.getElementById('gameboard');
   //generate boxes for 24 characters
   for (let i = 0; i < charNameArr.length; i++) {
@@ -24,9 +23,17 @@ function generateGameboard() {
     box.appendChild(charName);
     gameboard.appendChild(box);
 
+
+    box.addEventListener("click", function (){
+
+      if (firstTime){
+          firstTime = false;
+          var chosen= charNameArr[i];
+    document.getElementById("y").style.display = "block";
+              document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+      }
+    });
   }
-
-
 }
 
 
@@ -70,7 +77,11 @@ sigCh.on('message', data => {
 callButton.addEventListener('click', startCall);
 gameButton.addEventListener('click', startGame);
 
+function alerttest(x){
+  console.log("card selected");
+    console.log("x");
 
+}
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
@@ -84,10 +95,16 @@ function startCall() {
 function startGame() {
   console.log("I'm starting the game...");
     document.getElementById("remote-video").style.display = "none";
-      document.getElementById("chat-container").style.display = "none";
-    //document.getElementsByClassName("chat-container").style.display = "none";
+      document.getElementById("self-video").style.display = "none";
+        document.getElementById("start-call").style.display = "none";
+            document.getElementById("start-game").style.display = "none";
 
-  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+//  document.getElementsByClassName("chat-area").style.display = "none";
+
+ document.getElementById("choose").style.display = "block";
+  document.getElementById("gameboard").style.display = "inline-grid";
+
+  //  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
 
 }
 
