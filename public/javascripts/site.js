@@ -26,7 +26,6 @@ function generateGameboard() {
 
   }
 
-alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
 
 }
 
@@ -51,6 +50,7 @@ var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
+var gameButton = document.querySelector('#start-game');
 const constraints = {video:true, audio:false}
 
 var clientState = {
@@ -68,6 +68,7 @@ sigCh.on('message', data => {
 
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
+gameButton.addEventListener('click', startGame);
 
 
 function startCall() {
@@ -78,6 +79,16 @@ function startCall() {
 
   startStream();
   startNegotiation();
+}
+
+function startGame() {
+  console.log("I'm starting the game...");
+    document.getElementById("remote-video").style.display = "none";
+      document.getElementById("chat-container").style.display = "none";
+    //document.getElementsByClassName("chat-container").style.display = "none";
+
+  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+
 }
 
 sigCh.on('calling', function() {

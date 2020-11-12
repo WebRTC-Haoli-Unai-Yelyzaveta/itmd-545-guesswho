@@ -9,8 +9,14 @@
 font-size: 12px;
 
   }
+
+  h1{
+
+    display:none;
+  }
 #button{
-  display: inline;
+//  display: inline;
+display: none;
   margin: 0.5%;
 border-style: solid;
 padding: 0.2%;
@@ -19,7 +25,8 @@ padding: 0.2%;
 
 }
 .button{
-  display: inline;
+  display: none;
+//  display: inline;
     margin: 0.5%;
 border-style: solid;
 padding: 0.2%;
@@ -42,7 +49,8 @@ padding: 0.2%;
 
   /* game container */
   .game-container {
-    display: flex;
+    //display: flex;
+    display:none;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -55,7 +63,8 @@ padding: 0.2%;
 
   /* gameboard  */
   #gameboard {
-    display: inline-grid;
+  //  display: inline-grid;
+    display:none;
     grid-template-columns: repeat(4, 1fr);
   }
 
@@ -90,10 +99,13 @@ padding: 0.2%;
 
   /* chat box */
   .chat-container {
-    border-radius: 8px;
+    margin: auto;
+    align-content: center;
+    margin-top: 10%;
+    /* border-radius: 8px; */
     position: relative;
-    height: 400px;
-    width: 400px;
+    height: 10%;
+    width: 75%;
     overflow: hidden;
   }
 
@@ -102,7 +114,7 @@ padding: 0.2%;
     bottom: 0;
     width: 100%;
     background-color: #fff;
-    height: 10%;
+    height: 15%;
   }
 
   .chat-form {
@@ -263,6 +275,7 @@ video {
   border: 1px solid #DDD;
 }
 #self-video {
+  display:none;
   position: absolute;
   width: 20%;
   top: 12px;
