@@ -1,6 +1,7 @@
 extends layout
 
 block content
+
   main#content
     figure.streams
       video(
@@ -14,82 +15,30 @@ block content
       )
       figcaption
         button#start-call  Start call
+        button#start-game Play Game
+
+  p#choose Please choose a character card for the other player to guess.
+  p#introduction This is your opponent's board...
+
+  div#game.game-container
+       div#gameboard.game-item
+       img#y(src='images/test.png')
+       p#name Your character is
+       button#guess I'm Ready to Guess
+
+  div#gameboard2
 
 
 
-  h1#game-name
-    | Guess
-    span Who?
-
-    p
-      | First...Choose a character.
-
-      p.button(type="button") CHANTAL
-      p.button(type="button") ERIC
-      p.button(type="button") ALEX
-      p.button(type="button") BOB
-      p.button(type="button") PAUL
-      p.button(type="button") FRANK
-      p.button(type="button") ZOE
-      p.button(type="button") JOE
-      p.button(type="button") BUBA
-      p.button(type="button") RITA
-      p.button(type="button") RICK
-      p.button(type="button") ANTOINE
-      p.button(type="button") JOHN
-      p.button(type="button") CHAP
-      p.button(type="button") EVELYN
-      p.button(type="button") LADY
-      p.button(type="button") LILLIAN
-      p.button(type="button") JENNY
-      p.button(type="button") JAVIER
-      p.button(type="button") EVAN
-      p.button(type="button") MATHIAS
-      p.button(type="button") MICHAEL
-      p.button(type="button") HANK
-      p.button(type="button") VITO
-    script.
-      var buttons = document.getElementsByClassName('button');
-      for (var i=0 ; i < buttons.length ; i++){
-      (function(index){
-      buttons[index].onclick = function(){
-      const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
-      const cat = document.createElement('div');
-      const charImage = document.createElement('img');
-      charImage.className = "board-item-image";
-      charImage.src = `https://robohash.org/${charNameArr[index]}?set=set4`;
-      const charName = document.createElement('div');
-      const name = document.createTextNode(charNameArr[index]);
-      cat.appendChild(charImage);
-      gameboard.appendChild(cat);
-      charName.appendChild(name);
-      cat.appendChild(charImage);
-      cat.appendChild(charName);
-      alert("Thank you for picking a character! It is now displayed at the bottom of the screen. Remember...don't tell your opponent the name of your card until they guess it correctly.");
-      };
-      })(i)
-      }
-
-    //create gameboard
 
 
-    form(action='/add_guess', method='POST')
-    p
-      | Ready to make your guess? Type in your answer.
-      input(type='text', name='guess', value='')
-    input(type='submit', value='Submit')
 
-    p
-      | SCORE: 0 : 0
 
-  div.game-container
-    div#gameboard.game-item
-
-  div.chat-container
+  div#togglechat.chat-container
     ul.chat-area
     .chat-box
       form.chat-form
-        input#chat-input(placeholder='Type your message...')
+        input#chat-input(placeholder='')
         button#chat-btn(type='submit') Send
 
   script.
