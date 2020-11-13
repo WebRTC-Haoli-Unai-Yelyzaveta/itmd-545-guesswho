@@ -1,3 +1,32 @@
+#gameboard2{
+ float: right;
+ display:none;
+ width: 30%;
+ grid-template-columns: repeat(6, 1fr);
+ grid-gap: 5%;
+ }
+
+ .game-container {
+   width: 50%;
+   display: none;
+   flex-direction: column;
+   justify-content: center;
+   align-items: flex-start;
+ }
+
+ /* game item */
+ .game-item {
+   margin-bottom: 0.5em;
+ }
+
+ /* gameboard  */
+ #gameboard {
+ display: inline-grid;
+   //display:none;
+   grid-template-columns: repeat(4, 1fr);
+ }
+
+
 @media (min-width: 480px) {
   /* general style */
   body {
@@ -33,16 +62,10 @@
 }
 img{
   height: 70px;
-  width: 50px;;
+  width: 50px;
+  margin-bottom: 20px;
 }
- #gameboard2{
-  float: right;
-  display:none;
-  width: 30%;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(4, 5vw);
-  grid-gap: 15px;
-  }
+
   button{
   font-size: 16px;
 padding:1%;
@@ -95,25 +118,7 @@ padding:1%;
   }
 
   /* game container */
-  .game-container {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-  }
 
-  /* game item */
-  .game-item {
-    margin-bottom: 0.5em;
-  }
-
-  /* gameboard  */
-  #gameboard {
-  display: inline-grid;
-    //display:none;
-    grid-template-columns: repeat(4, 1fr);
-  }
 
   .board-item, #pickedcard {
     display: flex;
@@ -157,16 +162,16 @@ padding:1%;
     /* border-radius: 8px; */
     position: relative;
     height: 10%;
-    width: 60%;
+    width: 55%;
     overflow: hidden;
   }
 
   .chat-box {
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #fff;
-    height: 15%;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  height: 25%;
   }
 
   .chat-form {
@@ -176,7 +181,7 @@ padding:1%;
   .chat-area {
     display: flex;
     flex-direction: column;
-    padding: 22px;
+    padding: 60px;
     height: 80%;
     overflow-y: scroll;
     list-style: none;
