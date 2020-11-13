@@ -180,13 +180,13 @@ padding:1%;
 
   .chat-area {
     display: flex;
-        flex-direction: column;
-        padding: 60px;
-        height: 80%;
-        overflow-y: scroll;
-        list-style: none;
-        margin-top: 0;
-        background-color: #e16162;
+    flex-direction: column;
+    padding: 60px;
+    height: 80%;
+    overflow-y: scroll;
+    list-style: none;
+    margin-top: 0;
+    background-color: #e16162;
   }
 
   li.peer {
