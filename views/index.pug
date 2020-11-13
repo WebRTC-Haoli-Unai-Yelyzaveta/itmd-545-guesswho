@@ -1,6 +1,7 @@
 extends layout
 
 block content
+
   main#content
     figure.streams
       video(
@@ -17,10 +18,17 @@ block content
         button#start-game Play Game
 
   p#choose Please choose a character card for the other player to guess.
-  div.game-container
-    div#gameboard.game-item
 
+  div.game-container
+       div#gameboard.game-item
+
+  div#gameboard2
+
+  p#introduction This is your opponent's board...
+  
   img#y(src='images/test.png')
+
+
 
   div.chat-container
     ul.chat-area

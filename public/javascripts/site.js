@@ -25,12 +25,12 @@ function generateGameboard() {
 
 
     box.addEventListener("click", function (){
-
       if (firstTime){
           firstTime = false;
           var chosen= charNameArr[i];
     document.getElementById("y").style.display = "block";
               document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+              opponent();
       }
     });
   }
@@ -91,6 +91,22 @@ function startCall() {
   startStream();
   startNegotiation();
 }
+
+function opponent(){
+
+  document.getElementById("gameboard2").style.display = "grid";
+  document.getElementById("choose").style.display = "none";
+  console.log("Your opponents board is now being generated");
+//  document.getElementById("MyElement").classList.toggle('MyClass');
+  for (var i = 0; i < 24; i++) {
+  //  $(“#gameboard”).append(‘<div class=”card”><img src=”img/’ + pics[i] + ‘ “></div>’);
+  var img = document.createElement("img");
+img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
+var src = document.getElementById("gameboard2");
+src.appendChild(img);
+  }
+}
+
 
 function startGame() {
   console.log("I'm starting the game...");
