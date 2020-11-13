@@ -4,21 +4,22 @@
     padding: 2em;
     font-family: 'Source Serif Pro', serif;
     background-color: #1FA392;
-  }
+    }
+
   p{
-font-size: 12px;
-color: white;
-  }
+    font-size: 12px;
+    color: white;
+    }
 
-.MyClass{
+    .MyClass{
+    }
 
-}
+  #guess{
+    display: none;
+    margin: auto;
+    margin-top:-12%;
+    }
 
-#guess{
-  display: none;
-  margin: auto;
-  margin-top:-12%;
-}
   #name{
     display: none;
     font-size: 18px;
@@ -34,18 +35,16 @@ img{
   height: 70px;
   width: 50px;;
 }
-#gameboard2{
+ #gameboard2{
   float: right;
-//  display: inline-block;
-display:none;
+  display:none;
   width: 30%;
-//  display: grid;
-grid-template-columns: repeat(6, 1fr);
-grid-template-rows: repeat(4, 5vw);
-grid-gap: 15px;
-}
-button{
-font-size: 16px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 5vw);
+  grid-gap: 15px;
+  }
+  button{
+  font-size: 16px;
 padding:1%;
     display: block;
     margin-top: 2%;
@@ -66,24 +65,21 @@ padding:1%;
     text-align: center;
   }
 #button{
-//  display: inline;
-display: none;
-  margin: 0.5%;
-border-style: solid;
-padding: 0.2%;
- border-width: 0.7px;
- cursor:pointer;
-
-}
-.button{
   display: none;
-//  display: inline;
-    margin: 0.5%;
-border-style: solid;
-padding: 0.2%;
+  margin: 0.5%;
+  border-style: solid;
+  padding: 0.2%;
  border-width: 0.7px;
  cursor:pointer;
+  }
 
+  .button{
+  display: none;
+  margin: 0.5%;
+  border-style: solid;
+  padding: 0.2%;
+  border-width: 0.7px;
+  cursor:pointer;
 }
 
   /* game title */
@@ -101,8 +97,7 @@ padding: 0.2%;
   /* game container */
   .game-container {
     width: 50%;
-    //display:none;
-  display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -220,6 +215,7 @@ padding: 0.2%;
   }
 
   #chat-btn {
+    margin-top: 0;
     position: absolute;
     right: 0;
     width: 20%;
@@ -313,11 +309,10 @@ float: right;
     font-size: 1.2em;
   }
 
-  #pickedcard-image {
-    width: 70%;
+#pickedcard-image {
+  width: 70%;
   }
 }
-
 
 #content {
   box-sizing: border-box;

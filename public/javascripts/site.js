@@ -104,37 +104,36 @@ function startCall() {
 }
 
 function opponent(){
-
+  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
   document.getElementById("game").style.display = "inline-flex";
   document.getElementById("gameboard2").style.display = "grid";
-    document.getElementById("choose").style.display = "none";
-        document.getElementById("name").style.display = "block";
-                document.getElementById("introduction").style.display = "block";
-                  document.getElementById("guess").style.display = "block";
-  //document.getElementById("choose").style.display = "none";
+  document.getElementById("choose").style.display = "none";
+  document.getElementById("name").style.display = "block";
+  document.getElementById("introduction").style.display = "block";
+  document.getElementById("guess").style.display = "block";
+
   console.log("Your opponents board is now being generated");
-//  document.getElementById("MyElement").classList.toggle('MyClass');
+
   for (var i = 0; i < 24; i++) {
-  //  $(“#gameboard”).append(‘<div class=”card”><img src=”img/’ + pics[i] + ‘ “></div>’);
+
   var img = document.createElement("img");
-img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
-var src = document.getElementById("gameboard2");
-src.appendChild(img);
+  img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
+  var src = document.getElementById("gameboard2");
+  src.appendChild(img);
   }
 }
 
 
 function startGame() {
   console.log("I'm starting the game...");
-    document.getElementById("remote-video").style.display = "none";
-      document.getElementById("self-video").style.display = "none";
-        document.getElementById("start-call").style.display = "none";
-            document.getElementById("start-game").style.display = "none";
- document.getElementById("choose").style.display = "block";
+  document.getElementById("remote-video").style.display = "none";
+  document.getElementById("self-video").style.display = "none";
+  document.getElementById("start-call").style.display = "none";
+  document.getElementById("start-game").style.display = "none";
+  document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-        document.getElementById("togglechat").style.display = "none";
-  //  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+  document.getElementById("togglechat").style.display = "none";
 
 }
 
