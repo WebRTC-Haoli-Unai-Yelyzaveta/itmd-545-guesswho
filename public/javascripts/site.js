@@ -32,8 +32,17 @@ function generateGameboard() {
               document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
               document.getElementById("y").style.display = "block";
               document.getElementById("name").innerHTML = chosen;
+              var str=1;
               opponent();
       }
+     if(str==1)
+     {
+       charImage.src =`https://robohash.org/${charNameArr[i]}?set=set4`;
+     }
+     else
+
+      charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+
     });
   }
 }
@@ -101,6 +110,7 @@ function opponent(){
     document.getElementById("choose").style.display = "none";
         document.getElementById("name").style.display = "block";
                 document.getElementById("introduction").style.display = "block";
+                  document.getElementById("guess").style.display = "block";
   //document.getElementById("choose").style.display = "none";
   console.log("Your opponents board is now being generated");
 //  document.getElementById("MyElement").classList.toggle('MyClass');

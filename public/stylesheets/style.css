@@ -10,8 +10,18 @@ font-size: 12px;
 color: white;
   }
 
+.MyClass{
+
+}
+
+#guess{
+  display: none;
+  margin: auto;
+  margin-top:-12%;
+}
   #name{
     display: none;
+    font-size: 18px;
   }
 
 #introduction{
@@ -311,8 +321,6 @@ float: right;
 
 #content {
   box-sizing: border-box;
-  padding-top: 12px;
-  //max-width: 500px;
   width:50%;
   margin: 0 auto;
 }
