@@ -30,6 +30,8 @@ function generateGameboard() {
           var chosen= charNameArr[i];
     document.getElementById("y").style.display = "block";
               document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+              document.getElementById("y").style.display = "block";
+              document.getElementById("name").innerHTML = chosen;
               opponent();
       }
     });
@@ -94,8 +96,12 @@ function startCall() {
 
 function opponent(){
 
+  document.getElementById("game").style.display = "inline-flex";
   document.getElementById("gameboard2").style.display = "grid";
-  document.getElementById("choose").style.display = "none";
+    document.getElementById("choose").style.display = "none";
+        document.getElementById("name").style.display = "block";
+                document.getElementById("introduction").style.display = "block";
+  //document.getElementById("choose").style.display = "none";
   console.log("Your opponents board is now being generated");
 //  document.getElementById("MyElement").classList.toggle('MyClass');
   for (var i = 0; i < 24; i++) {
@@ -114,12 +120,10 @@ function startGame() {
       document.getElementById("self-video").style.display = "none";
         document.getElementById("start-call").style.display = "none";
             document.getElementById("start-game").style.display = "none";
-
-//  document.getElementsByClassName("chat-area").style.display = "none";
-
  document.getElementById("choose").style.display = "block";
+  document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-
+        document.getElementById("togglechat").style.display = "none";
   //  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
 
 }
