@@ -3,29 +3,83 @@
   body {
     padding: 2em;
     font-family: 'Source Serif Pro', serif;
-    background-color: #abd1c6;
-  }
-  p{
-font-size: 12px;
+    background-color: #1FA392;
+    }
 
+  p{
+    font-size: 12px;
+    color: white;
+    }
+
+    .MyClass{
+    }
+
+  #guess{
+    display: none;
+    margin: auto;
+    margin-top:-12%;
+    }
+
+  #name{
+    display: none;
+    font-size: 18px;
+  }
+
+#introduction{
+  display: none;
+  margin-left: 75%;
+  color: white;
+  font-size: 19px;
+}
+img{
+  height: 70px;
+  width: 50px;;
+}
+ #gameboard2{
+  float: right;
+  display:none;
+  width: 30%;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 5vw);
+  grid-gap: 15px;
+  }
+  button{
+  font-size: 16px;
+padding:1%;
+    display: block;
+    margin-top: 2%;
+    background-color: #e16162;
+    color: white;
+    border: none;
+}
+  h1{
+
+    display:none;
+  }
+
+  #choose{
+    font-size: 19px;
+    margin-bottom: 4%;
+    display:none;
+    color: white;
+    text-align: center;
   }
 #button{
-  display: inline;
+  display: none;
   margin: 0.5%;
-border-style: solid;
-padding: 0.2%;
+  border-style: solid;
+  padding: 0.2%;
  border-width: 0.7px;
  cursor:pointer;
+  }
 
-}
-.button{
-  display: inline;
-    margin: 0.5%;
-border-style: solid;
-padding: 0.2%;
- border-width: 0.7px;
- cursor:pointer;
-
+  .button{
+  display: none;
+  margin: 0.5%;
+  border-style: solid;
+  padding: 0.2%;
+  border-width: 0.7px;
+  cursor:pointer;
 }
 
   /* game title */
@@ -42,6 +96,7 @@ padding: 0.2%;
 
   /* game container */
   .game-container {
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -55,7 +110,8 @@ padding: 0.2%;
 
   /* gameboard  */
   #gameboard {
-    display: inline-grid;
+  display: inline-grid;
+    //display:none;
     grid-template-columns: repeat(4, 1fr);
   }
 
@@ -88,12 +144,20 @@ padding: 0.2%;
     padding-top: 0.25em;
   }
 
+  #y{
+
+    display: none;
+  }
+
   /* chat box */
   .chat-container {
-    border-radius: 8px;
+    margin: auto;
+    align-content: center;
+    margin-top: 3%;
+    /* border-radius: 8px; */
     position: relative;
-    height: 400px;
-    width: 400px;
+    height: 10%;
+    width: 60%;
     overflow: hidden;
   }
 
@@ -102,7 +166,7 @@ padding: 0.2%;
     bottom: 0;
     width: 100%;
     background-color: #fff;
-    height: 10%;
+    height: 15%;
   }
 
   .chat-form {
@@ -154,6 +218,7 @@ padding: 0.2%;
   }
 
   #chat-btn {
+    margin-top: 0;
     position: absolute;
     right: 0;
     width: 20%;
@@ -218,10 +283,13 @@ padding: 0.2%;
 
   /* game container */
   .game-container {
-    display: flex;
-    flex-direction: row;
+    /* width: 30%; */
+    margin: auto;
+    display:none;
+    //display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
   }
 
   /* game item */
@@ -231,6 +299,10 @@ padding: 0.2%;
     margin-right: 3em;
   }
 
+#opponentsboard{
+float: right;
+
+}
   /* gameboard  */
   #gameboard {
     grid-template-columns: repeat(6, 1fr);
@@ -240,16 +312,14 @@ padding: 0.2%;
     font-size: 1.2em;
   }
 
-  #pickedcard-image {
-    width: 70%;
+#pickedcard-image {
+  width: 70%;
   }
 }
 
-
 #content {
   box-sizing: border-box;
-  padding-top: 12px;
-  max-width: 500px;
+  width:50%;
   margin: 0 auto;
 }
 .videos {
