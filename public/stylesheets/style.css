@@ -184,7 +184,7 @@ padding:1%;
     background-color: #e16162;
   }
 
-  li {
+  li.peer {
     border-radius: 8px;
     background-color: #abd1c6;
     list-style: none;
@@ -193,9 +193,12 @@ padding:1%;
     margin-bottom: 12px;
   }
 
-  li.peer {
+  li.self {
+    border-radius: 8px;
     background-color: #e3e3e3;
     align-self: flex-end;
+    padding: 12px;
+    margin-bottom: 12px;
   }
 
   li:last-of-type {
