@@ -152,6 +152,7 @@ sigCh.on('message', data => {
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
 gameButton.addEventListener('click', startGame);
+checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
   console.log("card selected");
@@ -209,11 +210,21 @@ sigCh.on('calling', function() {
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
+    checkMediaButton.removeEventListener('click', checkMedia);
+    checkMediaButton.hidden = true;
     startStream();
     startNegotiation();
   });
 });
 
+async function checkMedia(){
+  try{
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    selfVideo.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
+}
 
 async function startStream(){
   try{
