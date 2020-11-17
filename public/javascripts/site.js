@@ -162,6 +162,7 @@ function alerttest(x){
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
+  checkMediaButton.hidden = true;
   clientState.polite = true;
   sigCh.emit('calling');
 
