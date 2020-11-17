@@ -138,7 +138,9 @@ remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
 var gameButton = document.querySelector('#start-game');
-const constraints = {video:true, audio:false}
+var checkMediaButton = document.querySelector('#check-media');
+
+const constraints = {video:true, audio:true}
 
 
 //Listen for 'message' event on the signaling channel
