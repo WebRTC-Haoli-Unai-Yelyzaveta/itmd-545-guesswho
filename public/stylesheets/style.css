@@ -339,7 +339,7 @@
 
   /* pick card */
   .pickedcard {
-    width: 40%;
+    width: 14%;
   }
 
 }
@@ -354,7 +354,7 @@
     grid-row: 1;
   }
 
-  figure {
+  main {
     grid-column: 1 / 4;
     grid-row: 2 / 3;
   }
@@ -380,7 +380,7 @@
   }
 
   .streams {
-    width: 100%;
+    width: 75%;
   }
 
   .chat-container {
@@ -397,9 +397,5 @@
     text-align: center;
   }
 
-  /* pick card */
-  .pickedcard {
-    width: 14%;
-  }
 
 }
