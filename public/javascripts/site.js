@@ -175,6 +175,9 @@ function opponent(){
   document.querySelector('#guess').style.display = "block";
   document.getElementById("introduction").style.display = "block";
   console.log("Your opponents board is now being generated");
+  document.getElementById("remote-video").style.display = "block";
+  document.getElementById("self-video").style.display = "block";
+  document.getElementById("togglechat").style.display = "block";
 
   for (var i = 0; i < 24; i++) {
 
@@ -187,6 +190,7 @@ function opponent(){
 
 
 function startGame() {
+    console.log("the button has been clicked..");
   console.log("I'm starting the game...");
   // document.getElementById("remote-video").style.display = "none";
   // document.getElementById("self-video").style.display = "none";
@@ -197,12 +201,14 @@ function startGame() {
   document.getElementById("gameboard").style.display = "inline-grid";
   // document.getElementById("togglechat").style.display = "none";
 
+
+
 }
 
 sigCh.on('calling', function() {
   console.log("Someone is calling me!");
   callButton.innerText = "Answer Call";
-  callButton.id = "answer";
+  callButton.id = "start-call";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
