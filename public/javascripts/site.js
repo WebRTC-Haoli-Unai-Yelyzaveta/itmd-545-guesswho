@@ -138,7 +138,9 @@ remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
 var gameButton = document.querySelector('#start-game');
-const constraints = {video:true, audio:false}
+var checkMediaButton = document.querySelector('#check-media');
+
+const constraints = {video:true, audio:true}
 
 
 //Listen for 'message' event on the signaling channel
@@ -150,6 +152,7 @@ sigCh.on('message', data => {
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
 gameButton.addEventListener('click', startGame);
+checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
   console.log("card selected");
@@ -159,6 +162,7 @@ function alerttest(x){
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
+  checkMediaButton.hidden = true;
   clientState.polite = true;
   sigCh.emit('calling');
 
@@ -171,10 +175,9 @@ function opponent(){
   document.getElementById("game").style.display = "inline-flex";
   document.getElementById("gameboard2").style.display = "grid";
   document.getElementById("choose").style.display = "none";
-  document.getElementById("name").style.display = "block";
+  document.querySelector('.pickedcard').style.display = "block";
+  document.querySelector('#guess').style.display = "block";
   document.getElementById("introduction").style.display = "block";
-  document.getElementById("guess").style.display = "block";
-
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
@@ -193,14 +196,16 @@ function opponent(){
 function startGame() {
     console.log("the button has been clicked..");
   console.log("I'm starting the game...");
-  document.getElementById("remote-video").style.display = "none";
-  document.getElementById("self-video").style.display = "none";
-  document.getElementById("start-call").style.display = "none";
-  document.getElementById("start-game").style.display = "none";
+  // document.getElementById("remote-video").style.display = "none";
+  // document.getElementById("self-video").style.display = "none";
+  // document.getElementById("start-call").style.display = "none";
+  // document.getElementById("start-game").style.display = "none";
   document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  document.getElementById("togglechat").style.display = "none";
+  // document.getElementById("togglechat").style.display = "none";
+
+
 
 
 
@@ -213,11 +218,21 @@ sigCh.on('calling', function() {
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
+    checkMediaButton.removeEventListener('click', checkMedia);
+    checkMediaButton.hidden = true;
     startStream();
     startNegotiation();
   });
 });
 
+async function checkMedia(){
+  try{
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    selfVideo.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
+}
 
 async function startStream(){
   try{
