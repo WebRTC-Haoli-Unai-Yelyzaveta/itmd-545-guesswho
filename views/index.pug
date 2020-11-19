@@ -2,37 +2,38 @@ extends layout
 
 block content
 
+  h1#game-name
+    | Guess
+    span Who?
   main#content
-    figure.streams
-      video(
-        id="self-video"
-        autoplay
-        playsinline
-      )
-      video(
-        id="remote-video"
-        autoplay
-      )
+    figure
+      div.streams
+        video.stream(
+          id="self-video"
+          autoplay
+          playsinline
+        )
+        video.stream(
+          id="remote-video"
+          autoplay
+        )
       figcaption
         button#start-call  Start call
         button#start-game Play Game
         button#check-media Check Media
 
   p#choose Please choose a character card for the other player to guess.
-  p#introduction This is your opponent's board...
-
   div#game.game-container
+    div.self-board
        div#gameboard.game-item
-       img#y(src='images/test.png')
-       p#name Your character is
-       button#guess I'm Ready to Guess
-
-  div#gameboard2
-
-
-
-
-
+       div.guess-panel
+        div.pickedcard
+         img#y(src='images/test.png')
+         div#name Your character is
+        button#guess I'm Ready to Guess
+    div.peer-board
+      p#introduction This is your opponent's board...
+      div#gameboard2
 
 
   div#togglechat.chat-container
