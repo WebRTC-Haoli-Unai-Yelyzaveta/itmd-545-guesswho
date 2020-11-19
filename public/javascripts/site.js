@@ -138,7 +138,9 @@ remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
 var gameButton = document.querySelector('#start-game');
-const constraints = {video:true, audio:false}
+var checkMediaButton = document.querySelector('#check-media');
+
+const constraints = {video:true, audio:true}
 
 
 //Listen for 'message' event on the signaling channel
@@ -150,6 +152,7 @@ sigCh.on('message', data => {
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
 gameButton.addEventListener('click', startGame);
+checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
   console.log("card selected");
@@ -159,6 +162,7 @@ function alerttest(x){
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
+  checkMediaButton.hidden = true;
   clientState.polite = true;
   sigCh.emit('calling');
 
@@ -212,11 +216,21 @@ sigCh.on('calling', function() {
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
+    checkMediaButton.removeEventListener('click', checkMedia);
+    checkMediaButton.hidden = true;
     startStream();
     startNegotiation();
   });
 });
 
+async function checkMedia(){
+  try{
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    selfVideo.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
+}
 
 async function startStream(){
   try{
