@@ -181,7 +181,7 @@
   .chat-area {
     display: flex;
     flex-direction: column;
-    padding: 22px;
+    padding: 60px;
     height: 80%;
     overflow-y: scroll;
     list-style: none;
