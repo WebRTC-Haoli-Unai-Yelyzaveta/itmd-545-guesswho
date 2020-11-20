@@ -126,6 +126,8 @@ pc.ondatachannel = (e) => {
   addDataChannelEventListener(dc);
 }
 
+// Variable for checking video
+const checkedVideo = document.querySelector('#checked-video');
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
@@ -151,7 +153,7 @@ sigCh.on('message', data => {
 
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
-gameButton.addEventListener('click', startGame);
+gameButton.addEventListener('click', showGame);
 checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
@@ -193,20 +195,20 @@ function opponent(){
 }
 
 
-function startGame() {
-    console.log("the button has been clicked..");
-  console.log("I'm starting the game...");
-  // document.getElementById("remote-video").style.display = "none";
-  // document.getElementById("self-video").style.display = "none";
-  // document.getElementById("start-call").style.display = "none";
-  // document.getElementById("start-game").style.display = "none";
+function showGame() {
+  console.log("the join game button has been clicked..");
+  console.log("Showing the gameboard...");
+  // Show the game board
   document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  // document.getElementById("togglechat").style.display = "none";
-
-
-
+  // Show the chat box
+  // TODO: show the chat button instead
+  document.getElementById("togglechat").style.display = "block";
+  // Show the video elements
+  document.querySelector("#content").style.display = "block";
+  // Hide the elements in the waiting room
+  document.querySelector(".checked-media-container").style.display = "none";
 }
 
 sigCh.on('calling', function() {
