@@ -226,6 +226,7 @@ sigCh.on('calling', function() {
 async function checkMedia(){
   try{
     var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    checkedVideo.srcObject = stream;
     selfVideo.srcObject = stream;
   }catch{
     console.log('Error');
