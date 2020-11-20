@@ -29,6 +29,7 @@
     font-family: 'Emilys Candy', cursive;
     margin: 0 auto 0.5em auto;
     text-align: center;
+    display: none;
   }
 
   #game-name span {
@@ -36,6 +37,10 @@
   }
 
   /* main tag: video elements*/
+  #content {
+    display: none;
+  }
+
   .streams {
     position: relative;
     width: 90%;
@@ -166,6 +171,7 @@
     height: 300px;
     width: 300px;
     overflow: hidden;
+    display: none;
   }
 
   .chat-box {
