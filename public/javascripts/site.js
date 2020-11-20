@@ -1,10 +1,12 @@
 
 //game part
+
 //create a name array for tracking
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
     var firstTime = true;
+
   const gameboard = document.getElementById('gameboard');
   //generate boxes for 24 characters
   for (let i = 0; i < charNameArr.length; i++) {
@@ -42,10 +44,20 @@ function generateGameboard() {
      else
 
       charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
-
+      console.log(i);
+      var index= i;
+      setIndex(index);
     });
   }
 }
+
+
+var cardclicked;
+
+function setIndex(index){
+  cardclicked= index;
+  console.log("cardcliked=" + cardclicked);
+};
 
 
 generateGameboard();
@@ -58,8 +70,8 @@ var rtc_config = null;
 const pc = new RTCPeerConnection(rtc_config);
 
 // Set the placeholder for the data channel
-var dc = null;
-
+var dc = "dc null";
+var gdc= "gdc null";
 // Track client states
 var clientState = {
   makingOffer: false,
@@ -73,6 +85,9 @@ var chatForm = document.querySelector('.chat-form');
 var chatInput = document.querySelector('#chat-input');
 var chatBtn = document.querySelector('#chat-btn');
 
+var done = false;
+
+
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
   var li = document.createElement('li');
@@ -80,6 +95,29 @@ function appendMsgToChatArea(area, msg, who) {
   li.className = who;
   li.appendChild(msg);
   area.appendChild(li);
+}
+
+var opponentcard;
+function addGameDataChannelEventListener(gamedata) {
+  gamedata.onmessage = (e) => {
+    opponentcard=e.data;
+    console.log(opponentcard);
+    flip(opponentcard);
+    appendMsgToChatArea(chatArea, e.data ,'peer');
+  }
+
+  //^send whatever you click on in there
+  //e.data
+  // Send chat messages from the self side
+//  while(done==false){
+  window.addEventListener('click', function(e) {
+    e.preventDefault();
+    var msg = cardclicked;
+  //  appendMsgToChatArea(chatArea, msg, 'self');
+    gamedata.send(msg);
+  //  chatInput.value = '';
+})
+  //}
 }
 
 // A function to listen for the data channel event
@@ -114,7 +152,9 @@ pc.onconnectionstatechange = (e) => {
     if (clientState.polite) {
       // console.log('data channel starts');
       dc = pc.createDataChannel('text chat');
+      gdc= pc.createDataChannel('game data');
       addDataChannelEventListener(dc);
+      addGameDataChannelEventListener(gdc);
     }
   }
 }
@@ -122,8 +162,16 @@ pc.onconnectionstatechange = (e) => {
 // Listen for the data channel on the peer side
 pc.ondatachannel = (e) => {
   // console.log('Heard data channel open...');
-  dc = e.channel;
+if (e.channel.label == 'text chat'){
+  //dc = e.channel;
+  gc = e.channel;
   addDataChannelEventListener(dc);
+}
+else if (e.channel.label == 'game data'){
+  gdc = e.channel;
+addGameDataChannelEventListener(gdc);
+}
+
 }
 
 //Variables for self video
@@ -171,6 +219,7 @@ function startCall() {
 }
 
 function opponent(){
+
   alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
   document.getElementById("game").style.display = "inline-flex";
   document.getElementById("gameboard2").style.display = "grid";
@@ -183,13 +232,32 @@ function opponent(){
   document.getElementById("self-video").style.display = "block";
   document.getElementById("togglechat").style.display = "block";
 
+
   for (var i = 0; i < 24; i++) {
 
+  var uniqid = "i"+ i;
   var img = document.createElement("img");
+  img.id= uniqid;
   img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
   var src = document.getElementById("gameboard2");
   src.appendChild(img);
+
+
   }
+}
+
+function flip(cardnumber){
+
+  for (var i = 0; i < 24; i++) {
+//  var idtag = str.substring(0);
+  //console.log(idtag);
+
+  if(i==opponentcard){
+    var revert= "i"+i;
+     document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+   }
+}
+
 }
 
 
@@ -204,10 +272,6 @@ function startGame() {
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
   // document.getElementById("togglechat").style.display = "none";
-
-
-
-
 
 }
 
@@ -318,16 +382,13 @@ async function receivedSignal({description, candidate}) {
       console.log("I just received a description...");
       const offerCollision = (description.type == "offer") &&
                              (clientState.makingOffer || pc.signalingState != "stable");
-
       clientState.ignoringOffer = !clientState.polite && offerCollision;
       //Leave if client is ignoring offers
       if(clientState.ignoringOffer){
         return;
       }
-
       //Set the remote description
       await pc.setRemoteDescription(description);
-
       //send an answer if it's an offer
       if(description.type == "offer"){
         console.log("It was an offer! Let me answer...");
