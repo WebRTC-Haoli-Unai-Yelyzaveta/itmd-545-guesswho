@@ -163,8 +163,8 @@ function startCall() {
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
-  sigCh.emit('calling');
-
+  sigCh.emit('game-on');
+  showGame();
   startStream();
   startNegotiation();
 }
@@ -208,15 +208,15 @@ function showGame() {
   document.querySelector(".checked-media-container").style.display = "none";
 }
 
-sigCh.on('calling', function() {
+sigCh.on('game-on', function() {
   console.log("Someone is calling me!");
-  callButton.innerText = "Answer Call";
-  callButton.id = "start-call";
+  console.log("Someone just joined the game room");
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
     checkMediaButton.removeEventListener('click', checkMedia);
     checkMediaButton.hidden = true;
+    showGame();
     startStream();
     startNegotiation();
   });
