@@ -211,6 +211,9 @@ function showGame() {
 sigCh.on('game-on', function() {
   console.log("Someone is calling me!");
   console.log("Someone just joined the game room");
+  // Update the room status by showing the message
+  const roomStatusMsg = document.querySelector("#room-status-msg");
+  roomStatusMsg.innerText = "There is 1 person in the game room";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
