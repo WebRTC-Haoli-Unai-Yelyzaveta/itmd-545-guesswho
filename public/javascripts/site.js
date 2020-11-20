@@ -139,9 +139,7 @@ var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
-var gameButton = document.querySelector('#start-game');
 var checkMediaButton = document.querySelector('#check-media');
-
 const constraints = {video:true, audio:true}
 
 
@@ -153,7 +151,6 @@ sigCh.on('message', data => {
 
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
-gameButton.addEventListener('click', showGame);
 checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
