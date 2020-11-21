@@ -185,7 +185,7 @@ function startCall() {
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
-  chatPopUp.style.display = "block";
+  // chatPopUp.style.display = "block";
   sigCh.emit('game-on');
   showGame();
   startStream();
@@ -203,7 +203,6 @@ function opponent(){
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  //chatPopUp.style.display = "block";
 
   for (var i = 0; i < 24; i++) {
 
@@ -225,7 +224,7 @@ function showGame() {
   document.getElementById("gameboard").style.display = "inline-grid";
   // Show the chat box
   // TODO: show the chat button instead
-  document.getElementById("togglechat").style.display = "none";
+  chatPopUp.style.display = "block";
   //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
@@ -239,7 +238,6 @@ sigCh.on('game-on', function() {
   // Update the room status by showing the message
   const roomStatusMsg = document.querySelector("#room-status-msg");
   roomStatusMsg.innerText = "There is 1 person in the game room";
-  chatPopUp.style.display = "block";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
