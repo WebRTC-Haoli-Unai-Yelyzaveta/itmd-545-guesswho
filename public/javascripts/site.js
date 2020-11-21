@@ -126,6 +126,8 @@ pc.ondatachannel = (e) => {
   addDataChannelEventListener(dc);
 }
 
+// Variable for checking video
+const checkedVideo = document.querySelector('#checked-video');
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
@@ -137,9 +139,7 @@ var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
 
 var callButton = document.querySelector('#start-call');
-var gameButton = document.querySelector('#start-game');
 var checkMediaButton = document.querySelector('#check-media');
-
 const constraints = {video:true, audio:true}
 
 
@@ -151,7 +151,6 @@ sigCh.on('message', data => {
 
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
-gameButton.addEventListener('click', startGame);
 checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
@@ -164,8 +163,8 @@ function startCall() {
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
-  sigCh.emit('calling');
-
+  sigCh.emit('game-on');
+  showGame();
   startStream();
   startNegotiation();
 }
@@ -193,33 +192,35 @@ function opponent(){
 }
 
 
-function startGame() {
-    console.log("the button has been clicked..");
-  console.log("I'm starting the game...");
-  // document.getElementById("remote-video").style.display = "none";
-  // document.getElementById("self-video").style.display = "none";
-  // document.getElementById("start-call").style.display = "none";
-  // document.getElementById("start-game").style.display = "none";
+function showGame() {
+  console.log("the join game button has been clicked..");
+  console.log("Showing the gameboard...");
+  // Show the game board
+  document.querySelector("body").style.display = "grid";
   document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  // document.getElementById("togglechat").style.display = "none";
-
-
-
-
-
+  // Show the chat box
+  // TODO: show the chat button instead
+  document.getElementById("togglechat").style.display = "block";
+  // Show the video elements
+  document.querySelector("#content").style.display = "block";
+  // Hide the elements in the waiting room
+  document.querySelector(".checked-media-container").style.display = "none";
 }
 
-sigCh.on('calling', function() {
+sigCh.on('game-on', function() {
   console.log("Someone is calling me!");
-  callButton.innerText = "Answer Call";
-  callButton.id = "start-call";
+  console.log("Someone just joined the game room");
+  // Update the room status by showing the message
+  const roomStatusMsg = document.querySelector("#room-status-msg");
+  roomStatusMsg.innerText = "There is 1 person in the game room";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
     checkMediaButton.removeEventListener('click', checkMedia);
     checkMediaButton.hidden = true;
+    showGame();
     startStream();
     startNegotiation();
   });
@@ -228,6 +229,7 @@ sigCh.on('calling', function() {
 async function checkMedia(){
   try{
     var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    checkedVideo.srcObject = stream;
     selfVideo.srcObject = stream;
   }catch{
     console.log('Error');

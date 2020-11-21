@@ -36,8 +36,8 @@ roomNamespace.on('connection', socket => {
   socket.emit("message",`User successfully connected to ${roomSocket.name}`);
 
   //Handle calling event from one peer to the other
-  socket.on('calling', function() {
-    socket.broadcast.emit('calling');
+  socket.on('game-on', function() {
+    socket.broadcast.emit('game-on');
   });
 
   //Handle signaling events

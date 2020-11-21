@@ -2,9 +2,22 @@ extends layout
 
 block content
 
+
   h1#game-name
     | Guess
     span Who?
+  div.checked-media-container
+    figure
+      div.streams
+        video.stream(
+          id="checked-video"
+          autoplay
+          playsinline
+        )
+        figcaption
+          button#check-media Check Media
+          button#start-call  Join Game
+        p#room-status-msg
   main#content
     figure
       div.streams
@@ -17,10 +30,6 @@ block content
           id="remote-video"
           autoplay
         )
-      figcaption
-        button#start-call  Start call
-        button#start-game Play Game
-        button#check-media Check Media
 
   p#choose Please choose a character card for the other player to guess.
   div#game.game-container

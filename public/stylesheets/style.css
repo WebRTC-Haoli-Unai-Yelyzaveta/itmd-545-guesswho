@@ -36,10 +36,15 @@
   }
 
   /* main tag: video elements*/
+  #content {
+    display: none;
+  }
+
   .streams {
     position: relative;
     width: 90%;
     margin: auto;
+    text-align: center;
   }
 
   .stream {
@@ -166,6 +171,7 @@
     height: 300px;
     width: 300px;
     overflow: hidden;
+    display: none;
   }
 
   .chat-box {
@@ -346,7 +352,9 @@
 
 @media (min-width: 1200px) {
   body {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   h1 {
@@ -381,6 +389,7 @@
 
   .streams {
     width: 75%;
+    max-width: 500px;
   }
 
   .chat-container {
