@@ -72,7 +72,7 @@ const chatArea = document.querySelector('.chat-area');
 const chatForm = document.querySelector('.chat-form');
 const chatInput = document.querySelector('#chat-input');
 const chatBtn = document.querySelector('#chat-btn');
-
+const chatPopUp = document.querySelector('#chat-popup')
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
   var li = document.createElement('li');
