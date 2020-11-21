@@ -68,10 +68,10 @@ var clientState = {
 }
 
 // Add DOM elements for the data channel
-var chatArea = document.querySelector('.chat-area');
-var chatForm = document.querySelector('.chat-form');
-var chatInput = document.querySelector('#chat-input');
-var chatBtn = document.querySelector('#chat-btn');
+const chatArea = document.querySelector('.chat-area');
+const chatForm = document.querySelector('.chat-form');
+const chatInput = document.querySelector('#chat-input');
+const chatBtn = document.querySelector('#chat-btn');
 
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
