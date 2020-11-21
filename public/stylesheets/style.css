@@ -15,6 +15,7 @@
   }
 
   button {
+    border-radius: 7px;
     font-size: 1.1em;
     padding:1%;
     background-color: #e16162;
@@ -237,10 +238,15 @@
     background-color: #f9bc60;
     outline: none;
   }
-
   #chat-btn:hover {
     cursor: pointer;
     background-color: #ff8e3c;
+  }
+  #chat-popup {
+    border-radius: 10px;
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
   }
 }
 
