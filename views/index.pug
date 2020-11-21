@@ -39,11 +39,9 @@ block content
   div#togglechat.chat-container
     ul.chat-area
     .chat-box
-      form.chat-form(action='/action_page.php')
-        h1 Chat
+      form.chat-form(action='')
         input#chat-input(placeholder='')
         button#chat-btn(type='submit') Send
-        button#chat-btnclose(type='button' onclick='closeForm()') Close
 
   script.
     window.NAMESPACE = "#{namespace}";
