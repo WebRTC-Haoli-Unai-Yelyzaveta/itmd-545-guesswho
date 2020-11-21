@@ -354,7 +354,7 @@
   body {
     display: flex;
     flex-direction: column;
-    justify-content:
+    justify-content: center;
   }
 
   h1 {
