@@ -245,7 +245,7 @@
     background-color: #ff8e3c;
   }
   #chat-popup {
-    border-radius: 25px;
+    border-radius: 10px;
     position: fixed;
     bottom: 10px;
     left: 10px;
