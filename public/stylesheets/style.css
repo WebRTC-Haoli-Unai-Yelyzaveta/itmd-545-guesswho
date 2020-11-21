@@ -244,6 +244,11 @@
     cursor: pointer;
     background-color: #ff8e3c;
   }
+  #chat-popup {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+  }
 }
 
 @media (min-width: 768px) {
