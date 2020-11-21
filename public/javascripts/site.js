@@ -28,12 +28,12 @@ function generateGameboard() {
       if (firstTime){
           firstTime = false;
           var chosen= charNameArr[i];
-    document.getElementById("y").style.display = "block";
-              document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
-              document.getElementById("y").style.display = "block";
-              document.getElementById("name").innerHTML = chosen;
-              var str=1;
-              opponent();
+          document.getElementById("y").style.display = "block";
+          document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+          document.getElementById("y").style.display = "block";
+          document.getElementById("name").innerHTML = chosen;
+          var str=1;
+          opponent();
       }
      if(str==1)
      {
@@ -76,17 +76,22 @@ const chatPopUp = document.querySelector('#chat-popup');
 const chatBox = document.querySelector('#togglechat');
 //
 var chatBoxState = {
-  hidden: false
+
+  hidden: true
 }
 chatPopUp.addEventListener('click', function(event){
   console.log("Someone click the chat button!");
   //var chatBox = document.getElementById('#togglechat.chat-container');
   if(chatBoxState.hidden){ //if the chatbox is hidden
-    chatBox.hidden=false; //we display it
+    //chatBox.hidden=false; //we display it
+    document.getElementById("togglechat").style.display = "block";
+    chatPopUp.innerText = "Hide Chat"
     chatBoxState.hidden=false;
   }else if(chatBoxState.hidden == false){
-    chatBox.hidden = true;
+    //chatBox.hidden = true;
+    document.getElementById("togglechat").style.display = "none";
     chatBoxState.hidden=true;
+    chatPopUp.innerText = "Show Chat";
   }
 });
 // A function to append message to the chat box chat box area
@@ -180,6 +185,7 @@ function startCall() {
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
+  chatPopUp.style.display = "block";
   sigCh.emit('game-on');
   showGame();
   startStream();
@@ -197,7 +203,7 @@ function opponent(){
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  //document.getElementById("togglechat").style.display = "block";
+  //chatPopUp.style.display = "block";
 
   for (var i = 0; i < 24; i++) {
 
@@ -219,7 +225,8 @@ function showGame() {
   document.getElementById("gameboard").style.display = "inline-grid";
   // Show the chat box
   // TODO: show the chat button instead
-  document.getElementById("togglechat").style.display = "block";
+  document.getElementById("togglechat").style.display = "none";
+  //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
   // Hide the elements in the waiting room
@@ -232,6 +239,7 @@ sigCh.on('game-on', function() {
   // Update the room status by showing the message
   const roomStatusMsg = document.querySelector("#room-status-msg");
   roomStatusMsg.innerText = "There is 1 person in the game room";
+  chatPopUp.style.display = "block";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
