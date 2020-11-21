@@ -197,7 +197,7 @@ function opponent(){
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  document.getElementById("togglechat").style.display = "block";
+  //document.getElementById("togglechat").style.display = "block";
 
   for (var i = 0; i < 24; i++) {
 
