@@ -15,6 +15,7 @@
   }
 
   button {
+    border-radius: 7px;
     font-size: 1.1em;
     padding:1%;
     background-color: #e16162;
@@ -247,8 +248,8 @@
   #chat-popup {
     border-radius: 10px;
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    bottom: 15px;
+    left: 15px;
   }
 }
 
