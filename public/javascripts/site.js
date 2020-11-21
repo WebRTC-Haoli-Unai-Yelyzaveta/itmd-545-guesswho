@@ -68,11 +68,27 @@ var clientState = {
 }
 
 // Add DOM elements for the data channel
-var chatArea = document.querySelector('.chat-area');
-var chatForm = document.querySelector('.chat-form');
-var chatInput = document.querySelector('#chat-input');
-var chatBtn = document.querySelector('#chat-btn');
-
+const chatArea = document.querySelector('.chat-area');
+const chatForm = document.querySelector('.chat-form');
+const chatInput = document.querySelector('#chat-input');
+const chatBtn = document.querySelector('#chat-btn');
+const chatPopUp = document.querySelector('#chat-popup');
+const chatBox = document.querySelector('#togglechat');
+//
+var chatBoxState = {
+  hidden: false
+}
+chatPopUp.addEventListener('click', function(event){
+  console.log("Someone click the chat button!");
+  //var chatBox = document.getElementById('#togglechat.chat-container');
+  if(chatBoxState.hidden){ //if the chatbox is hidden
+    chatBox.hidden=false; //we display it
+    chatBoxState.hidden=false;
+  }else if(chatBoxState.hidden == false){
+    chatBox.hidden = true;
+    chatBoxState.hidden=true;
+  }
+});
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
   var li = document.createElement('li');
@@ -138,8 +154,9 @@ const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
 
-var callButton = document.querySelector('#start-call');
-var checkMediaButton = document.querySelector('#check-media');
+const callButton = document.querySelector('#start-call');
+const checkMediaButton = document.querySelector('#check-media');
+
 const constraints = {video:true, audio:true}
 
 
@@ -180,7 +197,7 @@ function opponent(){
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  document.getElementById("togglechat").style.display = "block";
+  //document.getElementById("togglechat").style.display = "block";
 
   for (var i = 0; i < 24; i++) {
 
