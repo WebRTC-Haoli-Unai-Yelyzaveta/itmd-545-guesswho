@@ -28,12 +28,12 @@ function generateGameboard() {
       if (firstTime){
           firstTime = false;
           var chosen= charNameArr[i];
-    document.getElementById("y").style.display = "block";
-              document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
-              document.getElementById("y").style.display = "block";
-              document.getElementById("name").innerHTML = chosen;
-              var str=1;
-              opponent();
+          document.getElementById("y").style.display = "block";
+          document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+          document.getElementById("y").style.display = "block";
+          document.getElementById("name").innerHTML = chosen;
+          var str=1;
+          opponent();
       }
      if(str==1)
      {
@@ -197,7 +197,7 @@ function opponent(){
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  //document.getElementById("togglechat").style.display = "block";
+  //chatPopUp.style.display = "block";
 
   for (var i = 0; i < 24; i++) {
 
@@ -220,6 +220,7 @@ function showGame() {
   // Show the chat box
   // TODO: show the chat button instead
   document.getElementById("togglechat").style.display = "block";
+  //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
   // Hide the elements in the waiting room
