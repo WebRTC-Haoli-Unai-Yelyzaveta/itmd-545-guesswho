@@ -215,6 +215,8 @@ function opponent(){
 
 
 function showGame() {
+  // Get a MediaQueryList object
+  var desktopScreen = window.matchMedia("(min-width: 1200px)");
   console.log("the join game button has been clicked..");
   console.log("Showing the gameboard...");
   // Show the game board
@@ -222,9 +224,19 @@ function showGame() {
   document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  // Show the chat box
-  // TODO: show the chat button instead
-  chatPopUp.style.display = "block";
+  // Conditionally show the chat popup button and chat box
+  function showChatPopup(screen) {
+    if (desktopScreen.matches) {
+      chatPopUp.style.display = "none";
+      chatBox.style.display = "block";
+    } else {
+      chatPopUp.style.display = "block";
+      chatBox.style.display = "none";
+    }
+  }
+  showChatPopup(desktopScreen);
+  // Attach listener function on state changes
+  desktopScreen.addListener(showChatPopup);
   //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
