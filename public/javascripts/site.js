@@ -76,6 +76,7 @@ const chatPopUp = document.querySelector('#chat-popup');
 const chatBox = document.querySelector('#togglechat');
 //
 var chatBoxState = {
+
   hidden: true
 }
 chatPopUp.addEventListener('click', function(event){
