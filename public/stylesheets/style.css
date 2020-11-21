@@ -29,7 +29,6 @@
     font-family: 'Emilys Candy', cursive;
     margin: 0 auto 0.5em auto;
     text-align: center;
-    display: none;
   }
 
   #game-name span {
@@ -353,7 +352,9 @@
 
 @media (min-width: 1200px) {
   body {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    justify-content:
   }
 
   h1 {

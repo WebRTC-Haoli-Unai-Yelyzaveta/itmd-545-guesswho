@@ -196,6 +196,7 @@ function showGame() {
   console.log("the join game button has been clicked..");
   console.log("Showing the gameboard...");
   // Show the game board
+  document.querySelector("body").style.display = "grid";
   document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";

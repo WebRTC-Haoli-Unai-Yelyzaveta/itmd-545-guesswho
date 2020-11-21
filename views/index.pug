@@ -2,6 +2,10 @@ extends layout
 
 block content
 
+
+  h1#game-name
+    | Guess
+    span Who?
   div.checked-media-container
     figure
       div.streams
@@ -14,9 +18,6 @@ block content
           button#check-media Check Media
           button#start-call  Join Game
         p#room-status-msg
-  h1#game-name
-    | Guess
-    span Who?
   main#content
     figure
       div.streams
