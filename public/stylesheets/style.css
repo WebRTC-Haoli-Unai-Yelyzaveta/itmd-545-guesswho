@@ -56,9 +56,9 @@
 
   #self-video {
     position: absolute;
-    width: 30%;
-    bottom: 20px;
-    right: 15px;
+    width: 20%;
+    bottom: 12px;
+    right: 5px;
   }
 
   figcaption {
