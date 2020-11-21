@@ -244,6 +244,7 @@
   }
   #chat-popup {
     border-radius: 10px;
+    display: none;
     position: fixed;
     bottom: 25px;
     left: 25px;
