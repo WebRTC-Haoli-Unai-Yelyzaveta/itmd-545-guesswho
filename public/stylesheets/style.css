@@ -248,8 +248,8 @@
   #chat-popup {
     border-radius: 10px;
     position: fixed;
-    bottom: 15px;
-    left: 15px;
+    bottom: 25px;
+    left: 25px;
   }
 }
 
