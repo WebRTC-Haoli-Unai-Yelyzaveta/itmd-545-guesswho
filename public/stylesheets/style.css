@@ -245,9 +245,10 @@
     background-color: #ff8e3c;
   }
   #chat-popup {
+    border-radius: 25px;
     position: fixed;
-    bottom: 0px;
-    left: 0px;
+    bottom: 10px;
+    left: 10px;
   }
 }
 
