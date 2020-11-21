@@ -232,15 +232,6 @@
     background-color: #f9bc60;
     outline: none;
   }
-  #chat-btnclose {
-    margin-top: 0;
-    position: absolute;
-    right: 0;
-    width: 20%;
-    height: 100%;
-    background-color: #f9bc60;
-    outline: none;
-  }
   #chat-btn:hover {
     cursor: pointer;
     background-color: #ff8e3c;
