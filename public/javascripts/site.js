@@ -182,6 +182,7 @@ function startCall() {
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
+  chatPopUp.style.display = "block";
   sigCh.emit('game-on');
   showGame();
   startStream();
@@ -235,6 +236,7 @@ sigCh.on('game-on', function() {
   // Update the room status by showing the message
   const roomStatusMsg = document.querySelector("#room-status-msg");
   roomStatusMsg.innerText = "There is 1 person in the game room";
+  chatPopUp.style.display = "block";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
