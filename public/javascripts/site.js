@@ -76,7 +76,7 @@ const chatPopUp = document.querySelector('#chat-popup');
 const chatBox = document.querySelector('#togglechat');
 //
 var chatBoxState = {
-  hidden: false
+  hidden: true
 }
 chatPopUp.addEventListener('click', function(event){
   console.log("Someone click the chat button!");
@@ -84,11 +84,13 @@ chatPopUp.addEventListener('click', function(event){
   if(chatBoxState.hidden){ //if the chatbox is hidden
     //chatBox.hidden=false; //we display it
     document.getElementById("togglechat").style.display = "block";
+    chatPopUp.innerText = "Hide Chat"
     chatBoxState.hidden=false;
   }else if(chatBoxState.hidden == false){
     //chatBox.hidden = true;
     document.getElementById("togglechat").style.display = "none";
     chatBoxState.hidden=true;
+    chatPopUp.innerText = "Show Chat";
   }
 });
 // A function to append message to the chat box chat box area
@@ -222,7 +224,7 @@ function showGame() {
   document.getElementById("gameboard").style.display = "inline-grid";
   // Show the chat box
   // TODO: show the chat button instead
-  document.getElementById("togglechat").style.display = "block";
+  document.getElementById("togglechat").style.display = "none";
   //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
