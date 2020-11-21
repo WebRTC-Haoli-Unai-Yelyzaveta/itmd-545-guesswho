@@ -82,10 +82,12 @@ chatPopUp.addEventListener('click', function(event){
   console.log("Someone click the chat button!");
   //var chatBox = document.getElementById('#togglechat.chat-container');
   if(chatBoxState.hidden){ //if the chatbox is hidden
-    chatBox.hidden=false; //we display it
+    //chatBox.hidden=false; //we display it
+    document.getElementById("togglechat").style.display = "block";
     chatBoxState.hidden=false;
   }else if(chatBoxState.hidden == false){
-    chatBox.hidden = true;
+    //chatBox.hidden = true;
+    document.getElementById("togglechat").style.display = "none";
     chatBoxState.hidden=true;
   }
 });
