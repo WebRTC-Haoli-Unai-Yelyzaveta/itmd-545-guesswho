@@ -1,31 +1,3 @@
-#gameboard2{
- float: right;
- display:none;
- width: 30%;
- grid-template-columns: repeat(6, 1fr);
- grid-gap: 5%;
- }
-
- .game-container {
-   width: 50%;
-   display: none;
-   flex-direction: column;
-   justify-content: center;
-   align-items: flex-start;
- }
-
- /* game item */
- .game-item {
-   margin-bottom: 0.5em;
- }
-
- /* gameboard  */
- #gameboard {
- display: inline-grid;
-   //display:none;
-   grid-template-columns: repeat(4, 1fr);
- }
-
 
 @media (min-width: 480px) {
   /* general style */
@@ -33,77 +5,23 @@
     padding: 2em;
     font-family: 'Source Serif Pro', serif;
     background-color: #1FA392;
-    }
-
-  p{
-    font-size: 12px;
-    color: white;
-    }
-
-    .MyClass{
-    }
-
-  #guess{
-    display: none;
-    margin: auto;
-    margin-top:-12%;
-    }
-
-  #name{
-    display: none;
-    font-size: 18px;
+    display: flex;
+    flex-direction: column;
   }
 
-#introduction{
-  display: none;
-  margin-left: 75%;
-  color: white;
-  font-size: 19px;
-}
-img{
-  height: 70px;
-  width: 50px;
-  margin-bottom: 20px;
-}
+  p {
+    font-size: 1.2em;
+    color: white;
+  }
 
-  button{
-  font-size: 16px;
-padding:1%;
-    display: block;
-    margin-top: 2%;
+  button {
+    font-size: 1.1em;
+    padding:1%;
     background-color: #e16162;
     color: white;
     border: none;
-}
-  h1{
-
-    display:none;
+    cursor:pointer;
   }
-
-  #choose{
-    font-size: 19px;
-    margin-bottom: 4%;
-    display:none;
-    color: white;
-    text-align: center;
-  }
-#button{
-  display: none;
-  margin: 0.5%;
-  border-style: solid;
-  padding: 0.2%;
- border-width: 0.7px;
- cursor:pointer;
-  }
-
-  .button{
-  display: none;
-  margin: 0.5%;
-  border-style: solid;
-  padding: 0.2%;
-  border-width: 0.7px;
-  cursor:pointer;
-}
 
   /* game title */
   #game-name {
@@ -117,10 +35,65 @@ padding:1%;
     color: #001e1d;
   }
 
-  /* game container */
+  /* main tag: video elements*/
+  #content {
+    display: none;
+  }
 
+  .streams {
+    position: relative;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+  }
 
-  .board-item, #pickedcard {
+  .stream {
+    width:100%;
+    background-color: #222;
+    border: 1px solid #DDD;
+  }
+
+  #self-video {
+    position: absolute;
+    width: 30%;
+    bottom: 20px;
+    right: 15px;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  figcaption button {
+    margin: 1em;
+  }
+
+  #choose{
+    margin-bottom: 4%;
+    display:none;
+    color: white;
+    text-align: center;
+  }
+
+  /* game-container */
+  .game-container {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* self gameboard  */
+  #gameboard {
+    display:none;
+    grid-template-columns: repeat(5, 1fr);
+    margin-bottom: 2em;
+    width: 100%;
+  }
+
+  .board-item {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -136,52 +109,85 @@ padding:1%;
     border: solid 1px #e8e4e6;
   }
 
-  #pickedcard-image {
-    width: 80px;
-    padding: 0.25em;
-    margin: 0.15em;
-    border: solid 1px #e8e4e6;
-  }
-
-  .board-item-name, #pickedcard-name {
+  .board-item-name, #name {
     color: #e8e4e6;
     text-align: center;
     padding-top: 0.25em;
   }
 
-  #y{
+  /* guess panel */
+  .guess-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
+  .pickedcard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     display: none;
+    width: 15%;
+    padding: 0.5em;
+    background-color: #004643;
+    margin-right: 2em;
+  }
+
+  /* picked card image */
+  #y {
+    width: 90%;
+    padding: 0.2em;
+    border: solid 1px #e8e4e6;
+  }
+
+  #guess {
+    display: none;
+  }
+
+  /* introduction */
+  #introduction {
+    display: none;
+    color: white;
+    text-align: center;
+  }
+
+  /* opponent's board */
+  #gameboard2 {
+   display:none;
+   width: 50%;
+   grid-template-columns: repeat(6, 1fr);
+  }
+
+  #gameboard2 img {
+    width: 80%;
+    height: 90%;
+    margin-bottom: 1em;
   }
 
   /* chat box */
   .chat-container {
-    margin: auto;
-    align-content: center;
-    margin-top: 3%;
-    /* border-radius: 8px; */
+    margin-top: 2em;
     position: relative;
-    height: 10%;
-    width: 55%;
+    height: 300px;
+    width: 300px;
     overflow: hidden;
+    display: none;
   }
 
   .chat-box {
     position: absolute;
-  bottom: 0;
-  width: 100%;
-  background-color: #fff;
-  height: 25%;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    height: 10%;
   }
-
   .chat-form {
     display: flex;
   }
-
   .chat-area {
     display: flex;
     flex-direction: column;
-    padding: 60px;
+    padding: 22px;
     height: 80%;
     overflow-y: scroll;
     list-style: none;
@@ -239,9 +245,24 @@ padding:1%;
 }
 
 @media (min-width: 768px) {
+  /* general style */
+  p {
+    font-size: 1.3em;
+  }
+
+  button {
+    font-size: 1.1em;
+  }
+
   /* game title */
   #game-name {
     font-size: 3em;
+  }
+
+  /* video elements */
+  .streams {
+    width: 80%;
+    margin: auto;
   }
 
   /* game item */
@@ -250,19 +271,59 @@ padding:1%;
   }
 
   /* gameboard  */
-  .board-item-name, #pickedcard-name {
-    font-size: 1.2em;
+  .game-container {
+    flex-direction: row;
+    align-items: center;
   }
 
-  .board-item, #pickedcard {
+  /* self board */
+  .self-board {
+    margin-right: 2em;
+  }
+
+  #gameboard {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  /* peer board */
+  .peer-board {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1.5em;
+  }
+
+  #gameboard2 {
+    width: 100%;
+  }
+
+  .board-item-name {
+    font-size: 1em;
+  }
+
+  /* guess panel */
+  .guess-panel {
+    flex-direction: row;
+  }
+
+  /* pick card */
+  .pickedcard {
+    width: 14%;
+    margin-right: 2em;
+    margin-bottom: 2em;
+  }
+
+  .board-item {
     padding-top: 0.8em;
   }
 
-  #pickedcard-image {
-    width: 140px;
-    margin-left: 0.6em;
-    margin-right: 0.6em;
+  /* chat box */
+  .chat-container {
+    height: 350px;
+    width: 350px;
   }
+
 }
 
 @media (min-width: 992px) {
@@ -272,77 +333,78 @@ padding:1%;
     padding: 2em 5em;
   }
 
-  /* gameboard  */
-  #gameboard {
-    grid-template-columns: repeat(5, 1fr);
+  /* video */
+  .streams {
+    width: 70%;
+  }
+
+  /* introduction */
+  #introduction {
+    text-align: start;
+  }
+
+  /* pick card */
+  .pickedcard {
+    width: 14%;
   }
 
 }
 
 @media (min-width: 1200px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  h1 {
+    grid-column: 1 / 13;
+    grid-row: 1;
+  }
+
+  main {
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
+  }
+
+  .chat-container {
+    grid-column: 1 / 4;
+    grid-row: 3 / 4;
+  }
+
+
+  .game-container {
+    grid-column: 4 / 13;
+    grid-row: 2 / 4;
+  }
+
+  #choose {
+    display: none;
+  }
 
   /* game title */
   #game-name {
-    font-size: 5em;
+    font-size: 4em;
   }
 
-  /* game container */
-  .game-container {
-    /* width: 30%; */
+  .streams {
+    width: 75%;
+    max-width: 500px;
+  }
+
+  .chat-container {
     margin: auto;
-    display:none;
-    //display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
   }
 
-  /* game item */
-  .game-item {
-    margin-bottom: 0;
-    margin-left: 3em;
-    margin-right: 3em;
+  /* peer board */
+  #gameboard2 {
+    width: 80%;
+    margin: auto;
   }
 
-#opponentsboard{
-float: right;
-
-}
-  /* gameboard  */
-  #gameboard {
-    grid-template-columns: repeat(6, 1fr);
+  #introduction {
+    text-align: center;
   }
 
-  .board-item-name, #pickedcard-name {
-    font-size: 1.2em;
-  }
 
-#pickedcard-image {
-  width: 70%;
-  }
-}
-
-#content {
-  box-sizing: border-box;
-  width:50%;
-  margin: 0 auto;
-}
-.videos {
-  position: relative;
-}
-.videos figcaption {
-  padding: 12px;
-}
-video {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  background-color: #222;
-  border: 1px solid #DDD;
-}
-#self-video {
-  position: absolute;
-  width: 20%;
-  top: 12px;
-  right: 12px;
 }
