@@ -82,10 +82,12 @@ var clientState = {
 }
 
 // Add DOM elements for the data channel
-var chatArea = document.querySelector('.chat-area');
-var chatForm = document.querySelector('.chat-form');
-var chatInput = document.querySelector('#chat-input');
-var chatBtn = document.querySelector('#chat-btn');
+const chatArea = document.querySelector('.chat-area');
+const chatForm = document.querySelector('.chat-form');
+const chatInput = document.querySelector('#chat-input');
+const chatBtn = document.querySelector('#chat-btn');
+const chatPopUp = document.querySelector('#chat-popup');
+const chatBox = document.querySelector('#togglechat');
 var gameBoardSelect =  document.getElementById("game")
 
 var done = false;
@@ -94,6 +96,25 @@ pc.onicecandidate = ({candidate}) => {
   sigCh.emit('signal', {candidate:candidate});
 }
 
+var chatBoxState = {
+
+  hidden: true
+}
+chatPopUp.addEventListener('click', function(event){
+  console.log("Someone click the chat button!");
+  //var chatBox = document.getElementById('#togglechat.chat-container');
+  if(chatBoxState.hidden){ //if the chatbox is hidden
+    //chatBox.hidden=false; //we display it
+    document.getElementById("togglechat").style.display = "block";
+    chatPopUp.innerText = "Hide Chat"
+    chatBoxState.hidden=false;
+  }else if(chatBoxState.hidden == false){
+    //chatBox.hidden = true;
+    document.getElementById("togglechat").style.display = "none";
+    chatBoxState.hidden=true;
+    chatPopUp.innerText = "Show Chat";
+  }
+});
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
   console.log('somebody sent message', msg)
@@ -186,9 +207,8 @@ function GameDataChannelEventListener(gamedata) {
 
 }
 
-
-
-
+// Variable for checking video
+const checkedVideo = document.querySelector('#checked-video');
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
@@ -199,9 +219,8 @@ const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
 
-var callButton = document.querySelector('#start-call');
-var gameButton = document.querySelector('#start-game');
-var checkMediaButton = document.querySelector('#check-media');
+const callButton = document.querySelector('#start-call');
+const checkMediaButton = document.querySelector('#check-media');
 
 const constraints = {video:true, audio:true}
 
@@ -214,7 +233,6 @@ sigCh.on('message', data => {
 
 //Listen for 'click' event on the #start-stream button
 callButton.addEventListener('click', startCall);
-gameButton.addEventListener('click', startGame);
 checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
@@ -227,8 +245,9 @@ function startCall() {
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
-  sigCh.emit('calling');
-
+  chatPopUp.style.display = "block";
+  sigCh.emit('game-on');
+  showGame();
   startStream();
   startNegotiation();
 }
@@ -245,7 +264,7 @@ function opponent(){
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  document.getElementById("togglechat").style.display = "block";
+  //chatPopUp.style.display = "block";
 
 
   for (var i = 0; i < 24; i++) {
@@ -324,29 +343,37 @@ console.log(opponentschosen);
       });
 
 
-function startGame() {
-    console.log("the button has been clicked..");
-  console.log("I'm starting the game...");
-  // document.getElementById("remote-video").style.display = "none";
-  // document.getElementById("self-video").style.display = "none";
-  // document.getElementById("start-call").style.display = "none";
-  // document.getElementById("start-game").style.display = "none";
+function showGame() {
+  console.log("the join game button has been clicked..");
+  console.log("Showing the gameboard...");
+  // Show the game board
+  document.querySelector("body").style.display = "grid";
   document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  // document.getElementById("togglechat").style.display = "none";
-
+  // Show the chat box
+  // TODO: show the chat button instead
+  document.getElementById("togglechat").style.display = "none";
+  //document.getElementById("#chat-popup").style.display = "block";
+  // Show the video elements
+  document.querySelector("#content").style.display = "block";
+  // Hide the elements in the waiting room
+  document.querySelector(".checked-media-container").style.display = "none";
 }
 
-sigCh.on('calling', function() {
+sigCh.on('game-on', function() {
   console.log("Someone is calling me!");
-  callButton.innerText = "Answer Call";
-  callButton.id = "start-call";
+  console.log("Someone just joined the game room");
+  // Update the room status by showing the message
+  const roomStatusMsg = document.querySelector("#room-status-msg");
+  roomStatusMsg.innerText = "There is 1 person in the game room";
+  chatPopUp.style.display = "block";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
     checkMediaButton.removeEventListener('click', checkMedia);
     checkMediaButton.hidden = true;
+    showGame();
     startStream();
     startNegotiation();
   });
@@ -354,7 +381,8 @@ sigCh.on('calling', function() {
 
 async function checkMedia(){
   try{
-    var stream = await navigator.mediaDevices.getUserMedia(constraintsadd);
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    checkedVideo.srcObject = stream;
     selfVideo.srcObject = stream;
   }catch{
     console.log('Error');
