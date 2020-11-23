@@ -340,6 +340,7 @@ console.log(opponentschosen);
            var myobj4 = document.getElementById("choose");
             myobj4.remove();
         }
+        else alert("Sorry...that's incorrect");
       });
 
 
