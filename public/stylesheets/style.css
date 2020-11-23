@@ -1,5 +1,10 @@
 #sub{
 display: none;
+margin: 3%;
+}
+
+#subtext{
+display: none;
 }
 
 @media (min-width: 480px) {
