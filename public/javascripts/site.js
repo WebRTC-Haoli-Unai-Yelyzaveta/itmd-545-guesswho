@@ -1,7 +1,5 @@
+var chosen;
 
-//game part
-
-//create a name array for tracking
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
@@ -29,7 +27,7 @@ function generateGameboard() {
     box.addEventListener("click", function (){
       if (firstTime){
           firstTime = false;
-          var chosen= charNameArr[i];
+          chosen= charNameArr[i];
     document.getElementById("y").style.display = "block";
               document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
               document.getElementById("y").style.display = "block";
@@ -70,8 +68,8 @@ var rtc_config = null;
 const pc = new RTCPeerConnection(rtc_config);
 
 // Set the placeholder for the data channel
-var dc = "dc null";
-var gdc= "gdc null";
+var dc = null;
+var gdc= null;
 // Track client states
 var clientState = {
   makingOffer: false,
@@ -84,12 +82,17 @@ var chatArea = document.querySelector('.chat-area');
 var chatForm = document.querySelector('.chat-form');
 var chatInput = document.querySelector('#chat-input');
 var chatBtn = document.querySelector('#chat-btn');
+var gameBoardSelect =  document.getElementById("game")
 
 var done = false;
 
+pc.onicecandidate = ({candidate}) => {
+  sigCh.emit('signal', {candidate:candidate});
+}
 
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
+  console.log('somebody sent message', msg)
   var li = document.createElement('li');
   var msg = document.createTextNode(msg);
   li.className = who;
@@ -98,27 +101,6 @@ function appendMsgToChatArea(area, msg, who) {
 }
 
 var opponentcard;
-function addGameDataChannelEventListener(gamedata) {
-  gamedata.onmessage = (e) => {
-    opponentcard=e.data;
-    console.log(opponentcard);
-    flip(opponentcard);
-    appendMsgToChatArea(chatArea, e.data ,'peer');
-  }
-
-  //^send whatever you click on in there
-  //e.data
-  // Send chat messages from the self side
-//  while(done==false){
-  window.addEventListener('click', function(e) {
-    e.preventDefault();
-    var msg = cardclicked;
-  //  appendMsgToChatArea(chatArea, msg, 'self');
-    gamedata.send(msg);
-  //  chatInput.value = '';
-})
-  //}
-}
 
 // A function to listen for the data channel event
 function addDataChannelEventListener(datachannel) {
@@ -150,29 +132,109 @@ function addDataChannelEventListener(datachannel) {
 pc.onconnectionstatechange = (e) => {
   if(pc.connectionState == 'connected') {
     if (clientState.polite) {
-      // console.log('data channel starts');
+      console.log('data channel starts');
       dc = pc.createDataChannel('text chat');
-      gdc= pc.createDataChannel('game data');
+      gdc = pc.createDataChannel('game data');
       addDataChannelEventListener(dc);
-      addGameDataChannelEventListener(gdc);
+      var g = new GameDataChannelEventListener(gdc)
     }
   }
 }
 
 // Listen for the data channel on the peer side
 pc.ondatachannel = (e) => {
-  // console.log('Heard data channel open...');
-if (e.channel.label == 'text chat'){
-  //dc = e.channel;
-  gc = e.channel;
-  addDataChannelEventListener(dc);
-}
-else if (e.channel.label == 'game data'){
-  gdc = e.channel;
-addGameDataChannelEventListener(gdc);
+  if (e.channel.label == 'text chat') {
+    dc = e.channel;
+    addDataChannelEventListener(dc);
+  }
+    // Data channels can be distinguished by e.channel.label
+    // which would be `text chat` in this case. Use that to
+    // decide what to do with the channel that has opened
+    if (e.channel.label == 'game data') {
+      console.log('something happend in game channel')
+      var g = new GameDataChannelEventListener(e.channel)
+    }
+  // var chan= e.channel;
+  //
+  // if (chan.label == 'text chat') {
+  //   // Send chat messages from the self side
+  //   chatForm.addEventListener('submit', function(e) {
+  //     e.preventDefault();
+  //     var msg = chatInput.value;
+  //     appendMsgToChatArea(chatArea, msg, 'self');
+  //     chan.send(msg);
+  //     chatInput.value = '';
+  //   })
+  // } else {
+  //   //^send whatever you click on in there
+  //   //e.data
+  //   // Send chat messages from the self side
+  // //  while(done==false){
+  //   window.addEventListener('click', function(e) {
+  //         e.preventDefault();
+  //         var msg = cardclicked + " " +chosen;
+  //       //  appendMsgToChatArea(chatArea, msg, 'self');
+  //        chan.send(msg);
+  //       //  chatInput.value = '';
+  //
+  // })
+  // }
+  //
+  //
+  // chan.onmessage = (e) => {
+  //
+  //   if (chan.label == 'text chat'){
+  //
+  //     appendMsgToChatArea(chatArea, e.data + "test", 'peer');
+  //   }
+  //
+  //   else if (chan.label== 'game data'){
+  //       opponentcard=e.data;add
+  //       console.log(opponentcard);
+  //       flip(opponentcard);
+  //     //  appendMsgToChatArea(chatArea, e.data ,'peer');
+  //
+  //   }
+  // }
+  //
+  // chan.onopen = () => {
+  //   chatInput.disabled = false;
+  //   chatBtn.disabled = false;
+  // }
+  //
+  // chan.onclose = () => {
+  //   chatInput.disabled = true;
+  //   chatBtn.disabled = true;
+  // }
 }
 
+function GameDataChannelEventListener(gamedata) {
+  gamedata.onmessage = (e) => {
+    opponentcard=e.data;
+    console.log(opponentcard);
+    flip(opponentcard);
+  //  appendMsgToChatArea(chatArea, e.data ,'peer');
+  }
+
+
+  //^send whatever you click on in ther
+  // Send chat messages from the self side
+  gameBoardSelect.addEventListener('click', function(e) {
+        e.preventDefault();
+        var msg = cardclicked + " " +chosen;
+      //  appendMsgToChatArea(chatArea, msg, 'self');
+       gamedata.send(msg);
+      //  chatInput.value = '';
+    })
 }
+
+// sendMessage = function() {
+//   e.preventDefault();
+//   var msg = chatInput.value;
+//   appendMsgToChatArea(chatArea, msg, 'self');
+//   datachannel.send(msg);
+//   chatInput.value = '';
+// }
 
 //Variables for self video
 const selfVideo = document.querySelector('#self-video');
@@ -246,17 +308,27 @@ function opponent(){
   }
 }
 
-function flip(cardnumber){
+function flip(message){
 
+var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
+var opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
+
+  // = message.replace(/\D/g, "");
+// message.match(/\d+/g);
+console.log(cardnumber + " " + opponentschosen);
   for (var i = 0; i < 24; i++) {
 //  var idtag = str.substring(0);
   //console.log(idtag);
 
-  if(i==opponentcard){
+  if(i==cardnumber){
     var revert= "i"+i;
      document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
    }
 }
+
+document.getElementById("guess").addEventListener("click", function() {
+  document.getElementById("sub").style.display = "block";
+});
 
 }
 
@@ -291,7 +363,7 @@ sigCh.on('calling', function() {
 
 async function checkMedia(){
   try{
-    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    var stream = await navigator.mediaDevices.getUserMedia(constraintsadd);
     selfVideo.srcObject = stream;
   }catch{
     console.log('Error');
@@ -347,7 +419,7 @@ async function startNegotiation() {
 sigCh.on('signal', async function({description, candidate}) {
   try{
     if(description) {
-      console.log("I just received a description...");
+      //console.log("I just received a description...");
       const offerCollision = (description.type == 'offer') &&
                              (clientState.makingOffer || pc.signalingState != "stable");
 
@@ -367,8 +439,8 @@ sigCh.on('signal', async function({description, candidate}) {
         sigCh.emit('signal', {description: pc.localDescription});
       }
     }else if(candidate){
-      console.log('I just received a candidate...');
-      console.log(candidate);
+    //  console.log('I just received a candidate...');
+      //console.log(candidate);
       await pc.addIceCandidate(candidate);
     }
   }catch(err){
@@ -407,6 +479,3 @@ async function receivedSignal({description, candidate}) {
 */
 
 //Logic to send candidate
-pc.onicecandidate = ({candidate}) => {
-  sigCh.emit('signal', {candidate:candidate});
-}
