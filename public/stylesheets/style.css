@@ -181,6 +181,7 @@ display: none;
     width: 300px;
     overflow: hidden;
     display: none;
+    margin-bottom: 3em;
   }
 
   .chat-box {
