@@ -23,7 +23,6 @@ display: none;
   }
 
   button {
-    border-radius: 7px;
     font-size: 1.1em;
     padding:1%;
     background-color: #e16162;
@@ -181,6 +180,7 @@ display: none;
     width: 300px;
     overflow: hidden;
     display: none;
+    margin-bottom: 3em;
   }
 
   .chat-box {
