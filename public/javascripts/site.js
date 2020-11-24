@@ -253,11 +253,8 @@ function startCall() {
 }
 
 function opponent(){
-
-  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
   document.getElementById("game").style.display = "inline-flex";
   document.getElementById("gameboard2").style.display = "grid";
-  document.getElementById("choose").style.display = "none";
   document.querySelector('.pickedcard').style.display = "block";
   document.querySelector('#guess').style.display = "block";
   document.getElementById("introduction").style.display = "block";
@@ -350,7 +347,6 @@ function showGame() {
   console.log("Showing the gameboard...");
   // Show the game board
   document.querySelector("body").style.display = "grid";
-  document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
   // Conditionally show the chat popup button and chat box
@@ -371,6 +367,10 @@ function showGame() {
   document.querySelector("#content").style.display = "block";
   // Hide the elements in the waiting room
   document.querySelector(".checked-media-container").style.display = "none";
+  // Show the game introduction and start the game
+  // Future: may improve the logic to ensure everyone joined the game room before starting the game
+  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+  alert("Please choose a character card for the other player to guess.");
 }
 
 sigCh.on('game-on', function() {
