@@ -22,13 +22,13 @@ As for the moment, users are only able to turn the microphone and camera on to c
 
 Even though cats are loved by most people, we think it would be more fun to let the users choose between different characters to play the game. New sets of characters could be added from time to time so that players don't get used to playing with the same ones over and over again. These new characters could be human characters, different animals, add different clothing to each of them...
 
-6. Add a different gamemode with a timer so the players have less time to think of their questions.
+6. Add a different game mode with a timer so the players have less time to think of their questions.
 
-If some players want to make the game more interesting, we could add another gamemode where each player has a certain amount of time that we could show as a countdown every turn to ask a question about the other player's character. This game's winner depends a lot of asking the right questions based on previous answers. Having a limit of time to ask the questions could be an important factor to see which one of the players thinks faster under pressure.
+If some players want to make the game more interesting, we could add another game mode where each player has a certain amount of time that we could show as a countdown every turn to ask a question about the other player's character. This game's winner depends a lot of asking the right questions based on previous answers. Having a limit of time to ask the questions could be an important factor to see which one of the players thinks faster under pressure.
 
-7. Add another gamemode with the possibility to form teams (2 vs 2, for example).
+7. Add another game mode with the possibility to form teams (2 vs 2, for example).
 
-One of the bad things about this game is that only two players can play it in the same game. We think it would be great if we add a gamemode to increase the amount of players per game by playing 2 vs 2, for instance. This gamemode would be chosen in the waiting-room, so we would have to think of a way to sync both peers on choosing the same gamemode. We could do this through the signaling channel before joining the game-room. The gamemode logic would be decided in the future. For now, we are thinking on making each team choose 2 characters, and the winner team would have to guess correctly both of those characters.
+One of the bad things about this game is that only two players can play it in the same game. We think it would be great if we add a game mode to increase the amount of players per game by playing 2 vs 2, for instance. This game mode would be chosen in the waiting-room, so we would have to think of a way to sync both peers on choosing the same game mode. We could do this through the signaling channel before joining the game-room. The game mode logic would be decided in the future. For now, we are thinking on making each team choose 2 characters, and the winner team would have to guess correctly both of those characters.
 
 8. Add filters to the camera so users can have them on during the call.
 
