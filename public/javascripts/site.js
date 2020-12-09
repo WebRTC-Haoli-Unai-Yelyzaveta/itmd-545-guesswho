@@ -47,23 +47,6 @@ function generateGameboard() {
        charImage.src =`https://robohash.org/${charNameArr[i]}?set=set4`;
      }
      else
-
-if(oppwon=== "yes"){
-     alert("Your opponent won!");
-
-     var myobj = document.getElementById("gameboard");
-      myobj.remove();
-
-      var myobj2 = document.getElementById("peercontain");
-       myobj2.remove();
-
-       var myobj3 = document.getElementById("guesscontain");
-        myobj3.remove();
-
-        var myobj4 = document.getElementById("choose");
-         myobj4.remove();
-}
-
       charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
       console.log(i);
       var index= i;
@@ -132,6 +115,25 @@ if(oppwon=== "yes"){
 
         }
       }
+window.addEventListener("click", function() {
+    console.log("yes, click heard");
+      if(oppwon=== "yes"){
+           alert("Your opponent won!");
+
+           var myobj = document.getElementById("gameboard");
+            myobj.remove();
+
+            var myobj2 = document.getElementById("peercontain");
+             myobj2.remove();
+
+             var myobj3 = document.getElementById("guesscontain");
+              myobj3.remove();
+
+              var myobj4 = document.getElementById("choose");
+               myobj4.remove();
+      }
+      oppwon="no";
+    });
 }
 
 //generateGameboard();
