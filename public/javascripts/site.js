@@ -1,15 +1,16 @@
-
-//game part
-//create a name array for tracking
+var chosen;
+var start;
+var won;
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
-    var firstTime = true;
+  var firstTime = true;
   const gameboard = document.getElementById('gameboard');
   //generate boxes for 24 characters
   for (let i = 0; i < charNameArr.length; i++) {
     const box = document.createElement('div');
     box.className = "board-item";
+    box.id = "boarditemremove"; // Set the id
     const charImage = document.createElement('img');
     charImage.className = "board-item-image";
     //append image source from RoboHash API
@@ -23,42 +24,52 @@ function generateGameboard() {
     box.appendChild(charName);
     gameboard.appendChild(box);
 
-
     box.addEventListener("click", function (){
-      if (firstTime){
-          firstTime = false;
-          var chosen= charNameArr[i];
-          document.getElementById("y").style.display = "block";
-          document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
-          document.getElementById("y").style.display = "block";
-          document.getElementById("name").innerHTML = chosen;
-          var str=1;
-          opponent();
+      if(firstTime) {
+        firstTime = false;
+        chosen= charNameArr[i];
+        document.getElementById("y").style.display = "block";
+        document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+        document.getElementById("y").style.display = "block";
+        document.getElementById("name").innerHTML = chosen;
+        var str=1;
+        start=2;
+        opponent();
       }
-     if(str==1)
-     {
+
+     if(str==1) {
        charImage.src =`https://robohash.org/${charNameArr[i]}?set=set4`;
      }
-     else
-
-      charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
-
+     else {
+       charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+       console.log(i);
+       var index= i;
+       setIndex(index);
+     }
     });
   }
 }
+
+
+var cardclicked;
+
+function setIndex(index){
+  cardclicked= index;
+  console.log("cardcliked=" + cardclicked);
+};
 
 
 generateGameboard();
 
 //socket connection to the signaling channel
 //between both peers
-
 const sigCh = io('/' + NAMESPACE);
 var rtc_config = null;
 const pc = new RTCPeerConnection(rtc_config);
 
 // Set the placeholder for the data channel
 var dc = null;
+var gdc= null;
 
 // Track client states
 var clientState = {
@@ -74,11 +85,18 @@ const chatInput = document.querySelector('#chat-input');
 const chatBtn = document.querySelector('#chat-btn');
 const chatPopUp = document.querySelector('#chat-popup');
 const chatBox = document.querySelector('#togglechat');
-//
-var chatBoxState = {
+var gameBoardSelect =  document.getElementById("game")
 
+var done = false;
+
+pc.onicecandidate = ({candidate}) => {
+  sigCh.emit('signal', {candidate:candidate});
+}
+
+var chatBoxState = {
   hidden: true
 }
+
 chatPopUp.addEventListener('click', function(event){
   console.log("Someone click the chat button!");
   //var chatBox = document.getElementById('#togglechat.chat-container');
@@ -94,14 +112,18 @@ chatPopUp.addEventListener('click', function(event){
     chatPopUp.innerText = "Show Chat";
   }
 });
+
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
+  console.log('somebody sent message', msg)
   var li = document.createElement('li');
   var msg = document.createTextNode(msg);
   li.className = who;
   li.appendChild(msg);
   area.appendChild(li);
 }
+
+var opponentcard;
 
 // A function to listen for the data channel event
 function addDataChannelEventListener(datachannel) {
@@ -133,18 +155,50 @@ function addDataChannelEventListener(datachannel) {
 pc.onconnectionstatechange = (e) => {
   if(pc.connectionState == 'connected') {
     if (clientState.polite) {
-      // console.log('data channel starts');
+      console.log('data channel starts');
       dc = pc.createDataChannel('text chat');
+      gdc = pc.createDataChannel('game data');
       addDataChannelEventListener(dc);
+      var g = new GameDataChannelEventListener(gdc)
     }
   }
 }
 
 // Listen for the data channel on the peer side
 pc.ondatachannel = (e) => {
-  // console.log('Heard data channel open...');
-  dc = e.channel;
-  addDataChannelEventListener(dc);
+  if (e.channel.label == 'text chat') {
+    dc = e.channel;
+    addDataChannelEventListener(dc);
+  }
+    // Data channels can be distinguished by e.channel.label
+    // which would be `text chat` in this case. Use that to
+    // decide what to do with the channel that has opened
+    if (e.channel.label == 'game data') {
+      console.log('something happend in game channel')
+      var g = new GameDataChannelEventListener(e.channel)
+    }
+
+}
+
+function GameDataChannelEventListener(gamedata) {
+  gamedata.onmessage = (e) => {
+    opponentcard=e.data;
+    console.log(opponentcard);
+    flip(opponentcard);
+    // appendMsgToChatArea(chatArea, e.data ,'peer');
+  }
+  // send whatever you click on in ther
+  // Send chat messages from the self side
+  gameBoardSelect.addEventListener('click', function(e) {
+    e.preventDefault();
+    var msg = cardclicked + " " +chosen;
+    if(won==="end") {
+      msg = "end"
+    }
+    // appendMsgToChatArea(chatArea, msg, 'self');
+    gamedata.send(msg);
+    //  chatInput.value = '';
+  })
 }
 
 // Variable for checking video
@@ -154,7 +208,7 @@ const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
 selfVideo.srcObject = selfStream;
 
-//Variables for remote video from the peer
+// Variables for remote video from the peer
 const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
@@ -177,15 +231,14 @@ checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
   console.log("card selected");
-    console.log("x");
-
+  console.log("x");
 }
+
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
-  chatPopUp.style.display = "block";
   sigCh.emit('game-on');
   showGame();
   startStream();
@@ -193,44 +246,111 @@ function startCall() {
 }
 
 function opponent(){
-  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
   document.getElementById("game").style.display = "inline-flex";
   document.getElementById("gameboard2").style.display = "grid";
-  document.getElementById("choose").style.display = "none";
   document.querySelector('.pickedcard').style.display = "block";
   document.querySelector('#guess').style.display = "block";
   document.getElementById("introduction").style.display = "block";
   console.log("Your opponents board is now being generated");
   document.getElementById("remote-video").style.display = "block";
   document.getElementById("self-video").style.display = "block";
-  //chatPopUp.style.display = "block";
-
   for (var i = 0; i < 24; i++) {
-
-  var img = document.createElement("img");
-  img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
-  var src = document.getElementById("gameboard2");
-  src.appendChild(img);
+    var uniqid = "i"+ i;
+    var img = document.createElement("img");
+    img.id= uniqid;
+    img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
+    var src = document.getElementById("gameboard2");
+    src.appendChild(img);
   }
 }
 
+var opponentschosen;
+function flip(message) {
+  if(message==="end"){
+    alert("Your opponent won!");
+    var myobj = document.getElementById("gameboard");
+    myobj.remove();
+    var myobj2 = document.getElementById("peercontain");
+    myobj2.remove();
+    var myobj3 = document.getElementById("guesscontain");
+    myobj3.remove();
+    var myobj4 = document.getElementById("choose");
+    myobj4.remove();
+  }
+
+  var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
+  opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
+
+  // = message.replace(/\D/g, "");
+  // message.match(/\d+/g);
+  console.log(opponentschosen);
+  for (var i = 0; i < 24; i++) {
+    // var idtag = str.substring(0);
+    // console.log(idtag);
+    if(i==cardnumber) {
+      var revert= "i"+i;
+      document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+    }
+  }
+}
+
+document.getElementById("guess").addEventListener("click", function() {
+  document.getElementById("sub").style.display = "block";
+  document.getElementById("subtext").style.display = "block";
+});
+
+document.getElementById("sub").addEventListener("click", function() {
+  var myguess= document.getElementById("subtext").value;
+  console.log("my guess " +myguess);
+  if(myguess === opponentschosen) {
+    alert("Congrats, you won!");
+    won= "end";
+    // document.getElementById("gameboard").contentWindow.location.reload(true);
+    var myobj = document.getElementById("gameboard");
+    myobj.remove();
+    var myobj2 = document.getElementById("peercontain");
+    myobj2.remove();
+    var myobj3 = document.getElementById("guesscontain");
+    myobj3.remove();
+    var myobj4 = document.getElementById("choose");
+    myobj4.remove();
+  }else {
+    alert("Sorry...that's incorrect");
+  }
+});
+
 
 function showGame() {
+  // Get a MediaQueryList object
+  var desktopScreen = window.matchMedia("(min-width: 1200px)");
   console.log("the join game button has been clicked..");
   console.log("Showing the gameboard...");
   // Show the game board
   document.querySelector("body").style.display = "grid";
-  document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  // Show the chat box
-  // TODO: show the chat button instead
-  document.getElementById("togglechat").style.display = "none";
+  // Conditionally show the chat popup button and chat box
+  function showChatPopup(screen) {
+    if (desktopScreen.matches) {
+      chatPopUp.style.display = "none";
+      chatBox.style.display = "block";
+    } else {
+      chatPopUp.style.display = "block";
+      chatBox.style.display = "none";
+    }
+  }
+  showChatPopup(desktopScreen);
+  // Attach listener function on state changes
+  desktopScreen.addListener(showChatPopup);
   //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
   // Hide the elements in the waiting room
   document.querySelector(".checked-media-container").style.display = "none";
+  // Show the game introduction and start the game
+  // Future: may improve the logic to ensure everyone joined the game room before starting the game
+  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+  alert("Please choose a character card for the other player to guess.");
 }
 
 sigCh.on('game-on', function() {
@@ -239,7 +359,6 @@ sigCh.on('game-on', function() {
   // Update the room status by showing the message
   const roomStatusMsg = document.querySelector("#room-status-msg");
   roomStatusMsg.innerText = "There is 1 person in the game room";
-  chatPopUp.style.display = "block";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
@@ -310,7 +429,7 @@ async function startNegotiation() {
 sigCh.on('signal', async function({description, candidate}) {
   try{
     if(description) {
-      console.log("I just received a description...");
+      //console.log("I just received a description...");
       const offerCollision = (description.type == 'offer') &&
                              (clientState.makingOffer || pc.signalingState != "stable");
 
@@ -330,8 +449,8 @@ sigCh.on('signal', async function({description, candidate}) {
         sigCh.emit('signal', {description: pc.localDescription});
       }
     }else if(candidate){
-      console.log('I just received a candidate...');
-      console.log(candidate);
+    //  console.log('I just received a candidate...');
+      //console.log(candidate);
       await pc.addIceCandidate(candidate);
     }
   }catch(err){
@@ -345,16 +464,13 @@ async function receivedSignal({description, candidate}) {
       console.log("I just received a description...");
       const offerCollision = (description.type == "offer") &&
                              (clientState.makingOffer || pc.signalingState != "stable");
-
       clientState.ignoringOffer = !clientState.polite && offerCollision;
       //Leave if client is ignoring offers
       if(clientState.ignoringOffer){
         return;
       }
-
       //Set the remote description
       await pc.setRemoteDescription(description);
-
       //send an answer if it's an offer
       if(description.type == "offer"){
         console.log("It was an offer! Let me answer...");
@@ -373,6 +489,3 @@ async function receivedSignal({description, candidate}) {
 */
 
 //Logic to send candidate
-pc.onicecandidate = ({candidate}) => {
-  sigCh.emit('signal', {candidate:candidate});
-}

@@ -31,16 +31,17 @@ block content
           autoplay
         )
 
-  p#choose Please choose a character card for the other player to guess.
   div#game.game-container
     div.self-board
        div#gameboard.game-item
-       div.guess-panel
+       div#guesscontain.guess-panel
         div.pickedcard
          img#y(src='images/test.png')
          div#name Your character is
         button#guess I'm Ready to Guess
-    div.peer-board
+        button#sub Submit
+        input#subtext(placeholder='')
+    div#peercontain.peer-board
       p#introduction This is your opponent's board...
       div#gameboard2
 
