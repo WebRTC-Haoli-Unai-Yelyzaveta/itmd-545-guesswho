@@ -23,7 +23,6 @@ display: none;
   }
 
   button {
-    border-radius: 7px;
     font-size: 1.1em;
     padding:1%;
     background-color: #e16162;
@@ -64,9 +63,9 @@ display: none;
 
   #self-video {
     position: absolute;
-    width: 30%;
-    bottom: 20px;
-    right: 15px;
+    width: 20%;
+    bottom: 12px;
+    right: 5px;
   }
 
   figcaption {
@@ -181,6 +180,7 @@ display: none;
     width: 300px;
     overflow: hidden;
     display: none;
+    margin-bottom: 3em;
   }
 
   .chat-box {
@@ -385,6 +385,7 @@ display: none;
   .chat-container {
     grid-column: 1 / 4;
     grid-row: 3 / 4;
+    margin: auto;
   }
 
 
@@ -405,10 +406,6 @@ display: none;
   .streams {
     width: 75%;
     max-width: 500px;
-  }
-
-  .chat-container {
-    margin: auto;
   }
 
   /* peer board */

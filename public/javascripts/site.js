@@ -8,14 +8,13 @@ const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","B
 function generateGameboard() {
   console.log("yes, object here");
     var firstTime = true;
-
   const gameboard = document.getElementById('gameboard');
   //generate boxes for 24 characters
   for (let i = 0; i < charNameArr.length; i++) {
     const box = document.createElement('div');
     box.className = "board-item";
     box.id = "boarditemremove"; // Set the id
-  //  id.className = "boardremove";
+    
     const charImage = document.createElement('img');
     charImage.className = "board-item-image";
     //append image source from RoboHash API
@@ -29,30 +28,31 @@ function generateGameboard() {
     box.appendChild(charName);
     gameboard.appendChild(box);
 
-
     box.addEventListener("click", function (){
-      if (firstTime){
-          firstTime = false;
-          chosen= charNameArr[i];
-    document.getElementById("y").style.display = "block";
-              document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
-              document.getElementById("y").style.display = "block";
-              document.getElementById("name").innerHTML = chosen;
-              var str=1;
-              start=2;
-              opponent();
+
+      if(firstTime) {
+        firstTime = false;
+        chosen= charNameArr[i];
+        document.getElementById("y").style.display = "block";
+        document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
+        document.getElementById("y").style.display = "block";
+        document.getElementById("name").innerHTML = chosen;
+        var str=1;
+        start=2;
+        opponent();
       }
-     if(str==1)
-     {
+
+     if(str==1) {
        charImage.src =`https://robohash.org/${charNameArr[i]}?set=set4`;
      }
-     else
-      charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
-      console.log(i);
-      var index= i;
-      setIndex(index);
-    });
+     else {
+       charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+       console.log(i);
+       var index= i;
+       setIndex(index);
+     }
 
+    });
 
   }
 
@@ -140,7 +140,6 @@ window.addEventListener("click", function() {
 
 //socket connection to the signaling channel
 //between both peers
-
 const sigCh = io('/' + NAMESPACE);
 var rtc_config = null;
 const pc = new RTCPeerConnection(rtc_config);
@@ -148,6 +147,9 @@ const pc = new RTCPeerConnection(rtc_config);
 // Set the placeholder for the data channel
 var dc = null;
 var gdc= null;
+
+
+
 // Track client states
 var clientState = {
   makingOffer: false,
@@ -170,10 +172,11 @@ pc.onicecandidate = ({candidate}) => {
   sigCh.emit('signal', {candidate:candidate});
 }
 
-var chatBoxState = {
 
+var chatBoxState = {
   hidden: true
 }
+
 chatPopUp.addEventListener('click', function(event){
   console.log("Someone click the chat button!");
   //var chatBox = document.getElementById('#togglechat.chat-container');
@@ -189,6 +192,7 @@ chatPopUp.addEventListener('click', function(event){
     chatPopUp.innerText = "Show Chat";
   }
 });
+
 // A function to append message to the chat box chat box area
 function appendMsgToChatArea(area, msg, who) {
   console.log('somebody sent message', msg)
@@ -288,7 +292,7 @@ const selfVideo = document.querySelector('#self-video');
 var selfStream = new MediaStream();
 selfVideo.srcObject = selfStream;
 
-//Variables for remote video from the peer
+// Variables for remote video from the peer
 const remoteVideo = document.querySelector('#remote-video');
 var remoteStream = new MediaStream();
 remoteVideo.srcObject = remoteStream;
@@ -311,15 +315,14 @@ checkMediaButton.addEventListener('click', checkMedia);
 
 function alerttest(x){
   console.log("card selected");
-    console.log("x");
-
+  console.log("x");
 }
+
 function startCall() {
   console.log("I'm starting the call...");
   callButton.hidden = true;
   checkMediaButton.hidden = true;
   clientState.polite = true;
-  chatPopUp.style.display = "block";
   sigCh.emit('game-on');
   showGame();
   startStream();
@@ -347,25 +350,66 @@ console.log(opponentschosen);
      document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
    }
 }
+  
 }
+
+document.getElementById("guess").addEventListener("click", function() {
+  document.getElementById("sub").style.display = "block";
+  document.getElementById("subtext").style.display = "block";
+});
+
+document.getElementById("sub").addEventListener("click", function() {
+  var myguess= document.getElementById("subtext").value;
+  console.log("my guess " +myguess);
+  if(myguess === opponentschosen) {
+    alert("Congrats, you won!");
+    won= "end";
+    // document.getElementById("gameboard").contentWindow.location.reload(true);
+    var myobj = document.getElementById("gameboard");
+    myobj.remove();
+    var myobj2 = document.getElementById("peercontain");
+    myobj2.remove();
+    var myobj3 = document.getElementById("guesscontain");
+    myobj3.remove();
+    var myobj4 = document.getElementById("choose");
+    myobj4.remove();
+  }else {
+    alert("Sorry...that's incorrect");
+  }
+});
 
 
 function showGame() {
+  // Get a MediaQueryList object
+  var desktopScreen = window.matchMedia("(min-width: 1200px)");
   console.log("the join game button has been clicked..");
   console.log("Showing the gameboard...");
   // Show the game board
   document.querySelector("body").style.display = "grid";
-  document.getElementById("choose").style.display = "block";
   document.getElementById("game").style.display = "flex";
   document.getElementById("gameboard").style.display = "inline-grid";
-  // Show the chat box
-  // TODO: show the chat button instead
-  document.getElementById("togglechat").style.display = "none";
+  // Conditionally show the chat popup button and chat box
+  function showChatPopup(screen) {
+    if (desktopScreen.matches) {
+      chatPopUp.style.display = "none";
+      chatBox.style.display = "block";
+    } else {
+      chatPopUp.style.display = "block";
+      chatBox.style.display = "none";
+    }
+  }
+  showChatPopup(desktopScreen);
+  // Attach listener function on state changes
+  desktopScreen.addListener(showChatPopup);
   //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
   // Hide the elements in the waiting room
   document.querySelector(".checked-media-container").style.display = "none";
+  // Show the game introduction and start the game
+  // Future: may improve the logic to ensure everyone joined the game room before starting the game
+  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+  alert("Please choose a character card for the other player to guess.");
 }
 
 sigCh.on('game-on', function() {
@@ -374,7 +418,6 @@ sigCh.on('game-on', function() {
   // Update the room status by showing the message
   const roomStatusMsg = document.querySelector("#room-status-msg");
   roomStatusMsg.innerText = "There is 1 person in the game room";
-  chatPopUp.style.display = "block";
   callButton.removeEventListener('click', startCall);
   callButton.addEventListener('click', function(){
     callButton.hidden = true;
