@@ -1,6 +1,8 @@
 var chosen;
 var start;
 var won;
+var oppwon;
+var cardclicked;
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
@@ -46,11 +48,29 @@ function generateGameboard() {
      }
      else
 
+if(oppwon=== "yes"){
+     alert("Your opponent won!");
+
+     var myobj = document.getElementById("gameboard");
+      myobj.remove();
+
+      var myobj2 = document.getElementById("peercontain");
+       myobj2.remove();
+
+       var myobj3 = document.getElementById("guesscontain");
+        myobj3.remove();
+
+        var myobj4 = document.getElementById("choose");
+         myobj4.remove();
+}
+
       charImage.src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
       console.log(i);
       var index= i;
       setIndex(index);
     });
+
+
   }
 
   function setIndex(index){
@@ -84,14 +104,36 @@ function generateGameboard() {
         }
         else alert("Sorry...that's incorrect");
       });
+
+      function opponent(){
+
+        alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+        document.getElementById("game").style.display = "inline-flex";
+        document.getElementById("gameboard2").style.display = "grid";
+        document.getElementById("choose").style.display = "none";
+        document.querySelector('.pickedcard').style.display = "block";
+        document.querySelector('#guess').style.display = "block";
+        document.getElementById("introduction").style.display = "block";
+        console.log("Your opponents board is now being generated");
+        document.getElementById("remote-video").style.display = "block";
+        document.getElementById("self-video").style.display = "block";
+        //chatPopUp.style.display = "block";
+
+
+        for (var i = 0; i < 24; i++) {
+
+        var uniqid = "i"+ i;
+        var img = document.createElement("img");
+        img.id= uniqid;
+        img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
+        var src = document.getElementById("gameboard2");
+        src.appendChild(img);
+
+
+        }
+      }
 }
 
-
-var cardclicked;
-
-
-
-var g = new generateGameboard();
 //generateGameboard();
 
 //socket connection to the signaling channel
@@ -282,57 +324,14 @@ function startCall() {
   startNegotiation();
 }
 
-function opponent(){
-
-  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
-  document.getElementById("game").style.display = "inline-flex";
-  document.getElementById("gameboard2").style.display = "grid";
-  document.getElementById("choose").style.display = "none";
-  document.querySelector('.pickedcard').style.display = "block";
-  document.querySelector('#guess').style.display = "block";
-  document.getElementById("introduction").style.display = "block";
-  console.log("Your opponents board is now being generated");
-  document.getElementById("remote-video").style.display = "block";
-  document.getElementById("self-video").style.display = "block";
-  //chatPopUp.style.display = "block";
-
-
-  for (var i = 0; i < 24; i++) {
-
-  var uniqid = "i"+ i;
-  var img = document.createElement("img");
-  img.id= uniqid;
-  img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
-  var src = document.getElementById("gameboard2");
-  src.appendChild(img);
-
-
-  }
-}
-
-
 var opponentschosen;
 function flip(message){
 
 if(message==="end"){
-  alert("Your opponent won!");
-
-  var myobj = document.getElementById("gameboard");
-   myobj.remove();
-
-   var myobj2 = document.getElementById("peercontain");
-    myobj2.remove();
-
-    var myobj3 = document.getElementById("guesscontain");
-     myobj3.remove();
-
-     var myobj4 = document.getElementById("choose");
-      myobj4.remove();
-
+  oppwon="yes";
 }
 var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
 opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
-
 
   // = message.replace(/\D/g, "");
 // message.match(/\d+/g);
@@ -347,8 +346,6 @@ console.log(opponentschosen);
    }
 }
 }
-
-
 
 
 function showGame() {
@@ -442,6 +439,8 @@ async function startNegotiation() {
     }
   }
 }
+
+var g = new generateGameboard();
 
 sigCh.on('signal', async function({description, candidate}) {
   try{
