@@ -4,6 +4,7 @@ var won;
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
+  console.log("yes, object here");
     var firstTime = true;
 
   const gameboard = document.getElementById('gameboard');
@@ -51,18 +52,47 @@ function generateGameboard() {
       setIndex(index);
     });
   }
+
+  function setIndex(index){
+    cardclicked= index;
+    console.log("cardcliked=" + cardclicked);
+  };
+
+  document.getElementById("guess").addEventListener("click", function() {
+    document.getElementById("sub").style.display = "block";
+      document.getElementById("subtext").style.display = "block";
+      });
+
+      document.getElementById("sub").addEventListener("click", function() {
+        var myguess= document.getElementById("subtext").value;
+    console.log("my guess " +myguess);
+        if(myguess === opponentschosen){
+          alert("Congrats, you won!");
+          won= "end";
+      //    document.getElementById("gameboard").contentWindow.location.reload(true);
+        var myobj = document.getElementById("gameboard");
+         myobj.remove();
+
+         var myobj2 = document.getElementById("peercontain");
+          myobj2.remove();
+
+          var myobj3 = document.getElementById("guesscontain");
+           myobj3.remove();
+
+           var myobj4 = document.getElementById("choose");
+            myobj4.remove();
+        }
+        else alert("Sorry...that's incorrect");
+      });
 }
 
 
 var cardclicked;
 
-function setIndex(index){
-  cardclicked= index;
-  console.log("cardcliked=" + cardclicked);
-};
 
 
-generateGameboard();
+var g = new generateGameboard();
+//generateGameboard();
 
 //socket connection to the signaling channel
 //between both peers
@@ -280,6 +310,7 @@ function opponent(){
   }
 }
 
+
 var opponentschosen;
 function flip(message){
 
@@ -297,6 +328,7 @@ if(message==="end"){
 
      var myobj4 = document.getElementById("choose");
       myobj4.remove();
+
 }
 var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
 opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
@@ -316,32 +348,7 @@ console.log(opponentschosen);
 }
 }
 
-  document.getElementById("guess").addEventListener("click", function() {
-    document.getElementById("sub").style.display = "block";
-      document.getElementById("subtext").style.display = "block";
-      });
 
-      document.getElementById("sub").addEventListener("click", function() {
-        var myguess= document.getElementById("subtext").value;
-    console.log("my guess " +myguess);
-        if(myguess === opponentschosen){
-          alert("Congrats, you won!");
-          won= "end";
-      //    document.getElementById("gameboard").contentWindow.location.reload(true);
-        var myobj = document.getElementById("gameboard");
-         myobj.remove();
-
-         var myobj2 = document.getElementById("peercontain");
-          myobj2.remove();
-
-          var myobj3 = document.getElementById("guesscontain");
-           myobj3.remove();
-
-           var myobj4 = document.getElementById("choose");
-            myobj4.remove();
-        }
-        else alert("Sorry...that's incorrect");
-      });
 
 
 function showGame() {
