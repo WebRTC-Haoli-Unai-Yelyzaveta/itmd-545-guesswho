@@ -85,6 +85,16 @@ display: none;
     text-align: center;
   }
 
+  /* scoreboard */
+  #scoreboard {
+    /* display: none; */
+  }
+
+  #score {
+    padding-bottom: 2px;
+    border-bottom: 1px solid #fff;
+  }
+
   /* game-container */
   .game-container {
     width: 100%;
@@ -382,16 +392,22 @@ display: none;
     grid-row: 2 / 3;
   }
 
+  #scoreboard {
+    grid-column: 1/4;
+    grid-row: 3/4;
+    margin: auto;
+  }
+
   .chat-container {
     grid-column: 1 / 4;
-    grid-row: 3 / 4;
+    grid-row: 4 / 5;
     margin: auto;
   }
 
 
   .game-container {
     grid-column: 4 / 13;
-    grid-row: 2 / 4;
+    grid-row: 2 / 5;
   }
 
   #choose {
