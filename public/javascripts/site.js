@@ -82,8 +82,6 @@ function generateGameboard() {
           var myobj3 = document.getElementById("guesscontain");
            myobj3.remove();
 
-           var myobj4 = document.getElementById("choose");
-            myobj4.remove();
         }
         else alert("Sorry...that's incorrect");
       });
@@ -93,7 +91,6 @@ function generateGameboard() {
         alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
         document.getElementById("game").style.display = "inline-flex";
         document.getElementById("gameboard2").style.display = "grid";
-        document.getElementById("choose").style.display = "none";
         document.querySelector('.pickedcard').style.display = "block";
         document.querySelector('#guess').style.display = "block";
         document.getElementById("introduction").style.display = "block";
@@ -128,9 +125,6 @@ window.addEventListener("click", function() {
 
              var myobj3 = document.getElementById("guesscontain");
               myobj3.remove();
-
-              var myobj4 = document.getElementById("choose");
-               myobj4.remove();
       }
       oppwon="no";
     });
