@@ -464,6 +464,8 @@ function showGame() {
   //document.getElementById("#chat-popup").style.display = "block";
   // Show the video elements
   document.querySelector("#content").style.display = "block";
+  // Show the scoreboard
+  document.querySelector("#scoreboard").style.display = "block";
   // Hide the elements in the waiting room
   document.querySelector(".checked-media-container").style.display = "none";
   // Show the game introduction and start the game
