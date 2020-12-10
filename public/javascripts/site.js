@@ -1,16 +1,20 @@
 var chosen;
 var start;
 var won;
+var oppwon;
+var cardclicked;
 const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 //create gameboard
 function generateGameboard() {
-  var firstTime = true;
+  console.log("yes, object here");
+    var firstTime = true;
   const gameboard = document.getElementById('gameboard');
   //generate boxes for 24 characters
   for (let i = 0; i < charNameArr.length; i++) {
     const box = document.createElement('div');
     box.className = "board-item";
     box.id = "boarditemremove"; // Set the id
+    
     const charImage = document.createElement('img');
     charImage.className = "board-item-image";
     //append image source from RoboHash API
@@ -25,6 +29,7 @@ function generateGameboard() {
     gameboard.appendChild(box);
 
     box.addEventListener("click", function (){
+
       if(firstTime) {
         firstTime = false;
         chosen= charNameArr[i];
@@ -46,20 +51,86 @@ function generateGameboard() {
        var index= i;
        setIndex(index);
      }
+
     });
+
   }
+
+  function setIndex(index){
+    cardclicked= index;
+    console.log("cardcliked=" + cardclicked);
+  };
+
+  document.getElementById("guess").addEventListener("click", function() {
+    document.getElementById("sub").style.display = "block";
+      document.getElementById("subtext").style.display = "block";
+      });
+
+      document.getElementById("sub").addEventListener("click", function() {
+        var myguess= document.getElementById("subtext").value;
+    console.log("my guess " +myguess);
+        if(myguess === opponentschosen){
+          alert("Congrats, you won!");
+          won= "end";
+      //    document.getElementById("gameboard").contentWindow.location.reload(true);
+        var myobj = document.getElementById("gameboard");
+         myobj.remove();
+
+         var myobj2 = document.getElementById("peercontain");
+          myobj2.remove();
+
+          var myobj3 = document.getElementById("guesscontain");
+           myobj3.remove();
+
+        }
+        else alert("Sorry...that's incorrect");
+      });
+
+      function opponent(){
+
+        alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+        document.getElementById("game").style.display = "inline-flex";
+        document.getElementById("gameboard2").style.display = "grid";
+        document.querySelector('.pickedcard').style.display = "block";
+        document.querySelector('#guess').style.display = "block";
+        document.getElementById("introduction").style.display = "block";
+        console.log("Your opponents board is now being generated");
+        document.getElementById("remote-video").style.display = "block";
+        document.getElementById("self-video").style.display = "block";
+        //chatPopUp.style.display = "block";
+
+
+        for (var i = 0; i < 24; i++) {
+
+        var uniqid = "i"+ i;
+        var img = document.createElement("img");
+        img.id= uniqid;
+        img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
+        var src = document.getElementById("gameboard2");
+        src.appendChild(img);
+
+
+        }
+      }
+window.addEventListener("click", function() {
+    console.log("yes, click heard");
+      if(oppwon=== "yes"){
+           alert("Your opponent won!");
+
+           var myobj = document.getElementById("gameboard");
+            myobj.remove();
+
+            var myobj2 = document.getElementById("peercontain");
+             myobj2.remove();
+
+             var myobj3 = document.getElementById("guesscontain");
+              myobj3.remove();
+      }
+      oppwon="no";
+    });
 }
 
-
-var cardclicked;
-
-function setIndex(index){
-  cardclicked= index;
-  console.log("cardcliked=" + cardclicked);
-};
-
-
-generateGameboard();
+//generateGameboard();
 
 //socket connection to the signaling channel
 //between both peers
@@ -70,6 +141,8 @@ const pc = new RTCPeerConnection(rtc_config);
 // Set the placeholder for the data channel
 var dc = null;
 var gdc= null;
+
+
 
 // Track client states
 var clientState = {
@@ -92,6 +165,7 @@ var done = false;
 pc.onicecandidate = ({candidate}) => {
   sigCh.emit('signal', {candidate:candidate});
 }
+
 
 var chatBoxState = {
   hidden: true
@@ -181,24 +255,28 @@ pc.ondatachannel = (e) => {
 }
 
 function GameDataChannelEventListener(gamedata) {
+
   gamedata.onmessage = (e) => {
     opponentcard=e.data;
     console.log(opponentcard);
     flip(opponentcard);
-    // appendMsgToChatArea(chatArea, e.data ,'peer');
+  //  appendMsgToChatArea(chatArea, e.data ,'peer');
   }
-  // send whatever you click on in ther
+
+
+  //^send whatever you click on in ther
   // Send chat messages from the self side
   gameBoardSelect.addEventListener('click', function(e) {
-    e.preventDefault();
-    var msg = cardclicked + " " +chosen;
-    if(won==="end") {
-      msg = "end"
-    }
-    // appendMsgToChatArea(chatArea, msg, 'self');
-    gamedata.send(msg);
-    //  chatInput.value = '';
-  })
+        e.preventDefault();
+        var msg = cardclicked + " " +chosen;
+        if(won==="end"){
+          msg = "end"
+        }
+      //  appendMsgToChatArea(chatArea, msg, 'self');
+       gamedata.send(msg);
+      //  chatInput.value = '';
+})
+
 }
 
 // Variable for checking video
@@ -245,53 +323,28 @@ function startCall() {
   startNegotiation();
 }
 
-function opponent(){
-  document.getElementById("game").style.display = "inline-flex";
-  document.getElementById("gameboard2").style.display = "grid";
-  document.querySelector('.pickedcard').style.display = "block";
-  document.querySelector('#guess').style.display = "block";
-  document.getElementById("introduction").style.display = "block";
-  console.log("Your opponents board is now being generated");
-  document.getElementById("remote-video").style.display = "block";
-  document.getElementById("self-video").style.display = "block";
-  for (var i = 0; i < 24; i++) {
-    var uniqid = "i"+ i;
-    var img = document.createElement("img");
-    img.id= uniqid;
-    img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
-    var src = document.getElementById("gameboard2");
-    src.appendChild(img);
-  }
-}
-
 var opponentschosen;
-function flip(message) {
-  if(message==="end"){
-    alert("Your opponent won!");
-    var myobj = document.getElementById("gameboard");
-    myobj.remove();
-    var myobj2 = document.getElementById("peercontain");
-    myobj2.remove();
-    var myobj3 = document.getElementById("guesscontain");
-    myobj3.remove();
-    var myobj4 = document.getElementById("choose");
-    myobj4.remove();
-  }
+function flip(message){
 
-  var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
-  opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
+if(message==="end"){
+  oppwon="yes";
+}
+var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
+opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
 
   // = message.replace(/\D/g, "");
-  // message.match(/\d+/g);
-  console.log(opponentschosen);
+// message.match(/\d+/g);
+console.log(opponentschosen);
   for (var i = 0; i < 24; i++) {
-    // var idtag = str.substring(0);
-    // console.log(idtag);
-    if(i==cardnumber) {
-      var revert= "i"+i;
-      document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
-    }
-  }
+//  var idtag = str.substring(0);
+  //console.log(idtag);
+
+  if(i==cardnumber){
+    var revert= "i"+i;
+     document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+   }
+}
+  
 }
 
 document.getElementById("guess").addEventListener("click", function() {
@@ -425,6 +478,8 @@ async function startNegotiation() {
     }
   }
 }
+
+var g = new generateGameboard();
 
 sigCh.on('signal', async function({description, candidate}) {
   try{
