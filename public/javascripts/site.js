@@ -423,6 +423,8 @@ function GuessWho(gdc) {
     // Remove addEventListener to avoid being trigger by other clicked buttons
     // window.removeEventListener("click", MsgForLoser);
     console.log("Remove window Click");
+    gamestate = "start";
+    console.log(gamestate);
     console.log(oppwon)
     showGame();
     var g = new GuessWho(gdc);
