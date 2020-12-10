@@ -46,6 +46,7 @@ display: none;
   /* main tag: video elements*/
   #content {
     display: none;
+    text-align: center;
   }
 
   .streams {
@@ -88,6 +89,7 @@ display: none;
   /* scoreboard */
   #scoreboard {
     /* display: none; */
+    margin: auto;
   }
 
   #score {
@@ -395,7 +397,6 @@ display: none;
   #scoreboard {
     grid-column: 1/4;
     grid-row: 3/4;
-    margin: auto;
   }
 
   .chat-container {
