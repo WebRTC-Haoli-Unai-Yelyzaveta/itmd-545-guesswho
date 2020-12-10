@@ -173,6 +173,8 @@ function startCall() {
   checkMediaButton.hidden = true;
   clientState.polite = true;
   sigCh.emit('game-on');
+  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+  alert("Please choose a character card for the other player to guess.");
   showGame();
   startStream();
   startNegotiation();
@@ -189,6 +191,8 @@ sigCh.on('game-on', function() {
     callButton.hidden = true;
     checkMediaButton.removeEventListener('click', checkMedia);
     checkMediaButton.hidden = true;
+    alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+    alert("Please choose a character card for the other player to guess.");
     showGame();
     startStream();
     startNegotiation();
@@ -260,13 +264,14 @@ function GuessWho(gdc) {
   var opponentcard;
   var opponentschosen;
   var gameBoardSelect =  document.getElementById("game")
+  var gameboard = document.getElementById('gameboard');
+  var gameboard2 = document.getElementById("gameboard2");
   const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
 
   //create gameboard
   function generateGameboard() {
     console.log("yes, object here");
     var firstTime = true;
-    const gameboard = document.getElementById('gameboard');
     //generate boxes for 24 characters
     for (let i = 0; i < charNameArr.length; i++) {
       const box = document.createElement('div');
@@ -328,20 +333,20 @@ function GuessWho(gdc) {
     console.log("my guess " +myguess);
     if(myguess === opponentschosen){
       alert("Congrats, you won!");
+      alert("Click play again to play the game again!");
       won= "end";
-      var myobj = document.getElementById("gameboard");
-      myobj.remove();
-      var myobj2 = document.getElementById("peercontain");
-      myobj2.remove();
-      var myobj3 = document.getElementById("guesscontain");
-      myobj3.remove();
+      // var myobj = document.getElementById("gameboard");
+      // myobj.remove();
+      // var myobj2 = document.getElementById("peercontain");
+      // myobj2.remove();
+      // var myobj3 = document.getElementById("guesscontain");
+      // myobj3.remove();
     } else {
       alert("Sorry...that's incorrect");
     }
   });
 
   function opponent(){
-    alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
     document.getElementById("game").style.display = "inline-flex";
     document.getElementById("gameboard2").style.display = "grid";
     document.querySelector('.pickedcard').style.display = "block";
@@ -355,24 +360,47 @@ function GuessWho(gdc) {
       var img = document.createElement("img");
       img.id= uniqid;
       img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
-      var src = document.getElementById("gameboard2");
-      src.appendChild(img);
+      gameboard2.appendChild(img);
     }
   }
 
-  window.addEventListener("click", function() {
+  function MsgForLoser() {
     console.log("yes, click heard");
       if(oppwon=== "yes") {
         alert("Your opponent won!");
-        var myobj = document.getElementById("gameboard");
-        myobj.remove();
-        var myobj2 = document.getElementById("peercontain");
-        myobj2.remove();
-        var myobj3 = document.getElementById("guesscontain");
-        myobj3.remove();
+        alert("Click play again to play the game again!");
+        // var myobj = document.getElementById("gameboard");
+        // myobj.remove();
+        // var myobj2 = document.getElementById("peercontain");
+        // myobj2.remove();
+        // var myobj3 = document.getElementById("guesscontain");
+        // myobj3.remove();
       }
       oppwon="no";
-  });
+  }
+
+  window.addEventListener("click", MsgForLoser);
+
+  document.querySelector("#play-again").addEventListener("click", function() {
+    // var myobj = document.getElementById("gameboard");
+    // myobj.remove();
+    // var myobj2 = document.getElementById("peercontain");
+    // myobj2.remove();
+    // var myobj3 = document.getElementById("guesscontain");
+    // myobj3.remove();
+    while (gameboard.firstChild) {
+      gameboard.removeChild(gameboard.firstChild);
+    }
+    while (gameboard2.firstChild) {
+      gameboard2.removeChild(gameboard2.firstChild);
+    }
+    console.log("Remove child elements")
+    // Remove addEventListener to avoid being trigger by other clicked buttons
+    window.removeEventListener("click", MsgForLoser);
+    console.log("Remove window Click");
+    showGame();
+    var g = new GuessWho(gdc);
+  })
 
   gdc.onmessage = (e) => {
     opponentcard = e.data;
@@ -410,32 +438,8 @@ function GuessWho(gdc) {
     }
   }
 
-  document.getElementById("guess").addEventListener("click", function() {
-    document.getElementById("sub").style.display = "block";
-    document.getElementById("subtext").style.display = "block";
-  });
-
-  document.getElementById("sub").addEventListener("click", function() {
-    var myguess= document.getElementById("subtext").value;
-    console.log("my guess " +myguess);
-    if(myguess === opponentschosen) {
-      alert("Congrats, you won!");
-      won= "end";
-      // document.getElementById("gameboard").contentWindow.location.reload(true);
-      var myobj = document.getElementById("gameboard");
-      myobj.remove();
-      var myobj2 = document.getElementById("peercontain");
-      myobj2.remove();
-      var myobj3 = document.getElementById("guesscontain");
-      myobj3.remove();
-      var myobj4 = document.getElementById("choose");
-      myobj4.remove();
-    }else {
-      alert("Sorry...that's incorrect");
-    }
-  });
-
   generateGameboard();
+
 
 }
 
@@ -470,6 +474,5 @@ function showGame() {
   document.querySelector(".checked-media-container").style.display = "none";
   // Show the game introduction and start the game
   // Future: may improve the logic to ensure everyone joined the game room before starting the game
-  alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
-  alert("Please choose a character card for the other player to guess.");
+
 }
