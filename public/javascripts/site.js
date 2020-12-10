@@ -323,6 +323,64 @@ function GuessWho(gdc) {
     console.log("cardcliked=" + cardclicked);
   };
 
+  function opponent(){
+    document.getElementById("game").style.display = "inline-flex";
+    document.getElementById("gameboard2").style.display = "grid";
+    document.querySelector('.pickedcard').style.display = "block";
+    document.querySelector('#guess').style.display = "block";
+    document.getElementById("introduction").style.display = "block";
+    console.log("Your opponents board is now being generated");
+    document.getElementById("remote-video").style.display = "block";
+    document.getElementById("self-video").style.display = "block";
+    for (var i = 0; i < 24; i++) {
+      var uniqid = "i"+ i;
+      var img = document.createElement("img");
+      img.id= uniqid;
+      img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
+      gameboard2.appendChild(img);
+    }
+  }
+
+  //^send whatever you click on in ther
+  // Send chat messages from the self side
+  gameBoardSelect.addEventListener('click', function(e) {
+    e.preventDefault();
+    var msg = cardclicked + " " +chosen;
+    if(gamestate==="end"){
+      msg = "end"
+    }
+    gdc.send(msg);
+  })
+
+
+  gdc.onmessage = (e) => {
+    msg = e.data;
+    // 23 JENNEY
+    flip(msg);
+  }
+
+  function flip(message){
+    console.log("flip fuction called: ", message);
+    if(message==="end"){
+      oppwon="yes";
+    }
+
+    var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
+    console.log("cardnumber from flip function:", cardnumber);
+    opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
+    // = message.replace(/\D/g, "");
+    // message.match(/\d+/g);
+    console.log(opponentschosen);
+      for (var i = 0; i < 24; i++) {
+      // cross out opponents card
+      if(i==cardnumber){
+        var revert= "i"+i;
+        console.log(revert);
+         document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
+       }
+    }
+  }
+
   document.getElementById("guess").addEventListener("click", function() {
     document.getElementById("sub").style.display = "block";
     document.getElementById("subtext").style.display = "block";
@@ -342,24 +400,6 @@ function GuessWho(gdc) {
       alert("Sorry...that's incorrect");
     }
   });
-
-  function opponent(){
-    document.getElementById("game").style.display = "inline-flex";
-    document.getElementById("gameboard2").style.display = "grid";
-    document.querySelector('.pickedcard').style.display = "block";
-    document.querySelector('#guess').style.display = "block";
-    document.getElementById("introduction").style.display = "block";
-    console.log("Your opponents board is now being generated");
-    document.getElementById("remote-video").style.display = "block";
-    document.getElementById("self-video").style.display = "block";
-    for (var i = 0; i < 24; i++) {
-      var uniqid = "i"+ i;
-      var img = document.createElement("img");
-      img.id= uniqid;
-      img.src = "https://i1.wp.com/cornellsun.com/wp-content/uploads/2020/06/1591119073-screen_shot_2020-06-02_at_10.30.13_am.png?fit=700%2C652";
-      gameboard2.appendChild(img);
-    }
-  }
 
   window.addEventListener("click", function() {
     console.log("yes, click heard");
@@ -390,42 +430,6 @@ function GuessWho(gdc) {
     alert("Please choose a character card for the other player to guess.");
     var g = new GuessWho(gdc);
   })
-
-  gdc.onmessage = (e) => {
-    opponentcard = e.data;
-    console.log(opponentcard);
-    flip(opponentcard);
-  }
-
-  //^send whatever you click on in ther
-  // Send chat messages from the self side
-  gameBoardSelect.addEventListener('click', function(e) {
-    e.preventDefault();
-    var msg = cardclicked + " " +chosen;
-    if(won==="end"){
-      msg = "end"
-    }
-    gdc.send(msg);
-  })
-
-  function flip(message){
-    if(message==="end"){
-      oppwon="yes";
-    }
-    var cardnumber=  message.substr(0,message.indexOf(" ")); // "72"
-    opponentschosen =  message.substr(message.indexOf(" ")+1); // "tocirah sneab"
-    // = message.replace(/\D/g, "");
-    // message.match(/\d+/g);
-    console.log(opponentschosen);
-      for (var i = 0; i < 24; i++) {
-      //  var idtag = str.substring(0);
-      //console.log(idtag);
-      if(i==cardnumber){
-        var revert= "i"+i;
-         document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
-       }
-    }
-  }
   // Call this function when the game starts
   generateGameboard();
 }
