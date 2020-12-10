@@ -174,7 +174,6 @@ function startCall() {
   clientState.polite = true;
   sigCh.emit('game-on');
   alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
-  alert("Please choose a character card for the other player to guess.");
   showGame();
   startStream();
   startNegotiation();
@@ -192,7 +191,6 @@ sigCh.on('game-on', function() {
     checkMediaButton.removeEventListener('click', checkMedia);
     checkMediaButton.hidden = true;
     alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
-    alert("Please choose a character card for the other player to guess.");
     showGame();
     startStream();
     startNegotiation();
@@ -427,7 +425,6 @@ function GuessWho(gdc) {
     console.log("Remove window Click");
     console.log(oppwon)
     showGame();
-    alert("Please choose a character card for the other player to guess.");
     var g = new GuessWho(gdc);
   })
   // Call this function when the game starts
@@ -463,4 +460,5 @@ function showGame() {
   document.querySelector("#scoreboard").style.display = "block";
   // Hide the elements in the waiting room
   document.querySelector(".checked-media-container").style.display = "none";
+  alert("Please choose a character card for the other player to guess.");
 }
