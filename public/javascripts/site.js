@@ -255,7 +255,7 @@ pc.onicecandidate = ({candidate}) => {
 function GuessWho(gdc) {
   var chosen;
   var start;
-  var won;
+  var gamestate = "start";
   var oppwon;
   var cardclicked;
   var done = false;
@@ -390,7 +390,7 @@ function GuessWho(gdc) {
     if(myguess === opponentschosen){
       alert("Congrats, you won!");
       alert("Click play again to play the game again!");
-      won= "end";
+      gamestate= "end";
       // Hide the game board
       document.getElementById("game").style.display = "none";
       document.getElementById("gameboard").style.display = "none";
