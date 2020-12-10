@@ -335,12 +335,9 @@ function GuessWho(gdc) {
       alert("Congrats, you won!");
       alert("Click play again to play the game again!");
       won= "end";
-      // var myobj = document.getElementById("gameboard");
-      // myobj.remove();
-      // var myobj2 = document.getElementById("peercontain");
-      // myobj2.remove();
-      // var myobj3 = document.getElementById("guesscontain");
-      // myobj3.remove();
+      // Hide the game board
+      document.getElementById("game").style.display = "none";
+      document.getElementById("gameboard").style.display = "none";
     } else {
       alert("Sorry...that's incorrect");
     }
@@ -364,30 +361,20 @@ function GuessWho(gdc) {
     }
   }
 
-  function MsgForLoser() {
+  window.addEventListener("click", function() {
     console.log("yes, click heard");
       if(oppwon=== "yes") {
         alert("Your opponent won!");
         alert("Click play again to play the game again!");
-        // var myobj = document.getElementById("gameboard");
-        // myobj.remove();
-        // var myobj2 = document.getElementById("peercontain");
-        // myobj2.remove();
-        // var myobj3 = document.getElementById("guesscontain");
-        // myobj3.remove();
+        // Hide the game board
+        document.getElementById("game").style.display = "none";
+        document.getElementById("gameboard").style.display = "none";
       }
       oppwon="no";
-  }
+  });
 
-  window.addEventListener("click", MsgForLoser);
-
+  // Setting the game to its initial state when the button clicks
   document.querySelector("#play-again").addEventListener("click", function() {
-    // var myobj = document.getElementById("gameboard");
-    // myobj.remove();
-    // var myobj2 = document.getElementById("peercontain");
-    // myobj2.remove();
-    // var myobj3 = document.getElementById("guesscontain");
-    // myobj3.remove();
     while (gameboard.firstChild) {
       gameboard.removeChild(gameboard.firstChild);
     }
@@ -396,9 +383,11 @@ function GuessWho(gdc) {
     }
     console.log("Remove child elements")
     // Remove addEventListener to avoid being trigger by other clicked buttons
-    window.removeEventListener("click", MsgForLoser);
+    // window.removeEventListener("click", MsgForLoser);
     console.log("Remove window Click");
+    console.log(oppwon)
     showGame();
+    alert("Please choose a character card for the other player to guess.");
     var g = new GuessWho(gdc);
   })
 
@@ -437,10 +426,8 @@ function GuessWho(gdc) {
        }
     }
   }
-
+  // Call this function when the game starts
   generateGameboard();
-
-
 }
 
 function showGame() {
@@ -472,7 +459,4 @@ function showGame() {
   document.querySelector("#scoreboard").style.display = "block";
   // Hide the elements in the waiting room
   document.querySelector(".checked-media-container").style.display = "none";
-  // Show the game introduction and start the game
-  // Future: may improve the logic to ensure everyone joined the game room before starting the game
-
 }
