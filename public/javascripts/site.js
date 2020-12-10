@@ -14,7 +14,7 @@ function generateGameboard() {
     const box = document.createElement('div');
     box.className = "board-item";
     box.id = "boarditemremove"; // Set the id
-    
+
     const charImage = document.createElement('img');
     charImage.className = "board-item-image";
     //append image source from RoboHash API
@@ -344,7 +344,7 @@ console.log(opponentschosen);
      document.getElementById(revert).src = "https://upload.wikimedia.org/wikipedia/commons/0/04/X-black-white-border.svg";
    }
 }
-  
+
 }
 
 document.getElementById("guess").addEventListener("click", function() {
@@ -453,16 +453,6 @@ pc.ontrack = function(track) {
   console.log("RECEIVED TRACK!");
   remoteStream.addTrack(track.track);
 }
-/* HOW THEY DO IT IN THE PERFECT NEGOTIATION ARTICLE
-pc.ontrack = ({track, streams}) => {
-  track.onunmute = () => {
-    if (remoteVideo.srcObject) {
-      return;
-    }
-    remoteVideo.srcObject = streams[0];
-  };
-};
-*/
 
 async function startNegotiation() {
   pc.onnegotiationneeded = async () => {
@@ -512,35 +502,3 @@ sigCh.on('signal', async function({description, candidate}) {
     console.error(err);
   }
 });
-/*
-async function receivedSignal({description, candidate}) {
-  try{
-    if(description) {
-      console.log("I just received a description...");
-      const offerCollision = (description.type == "offer") &&
-                             (clientState.makingOffer || pc.signalingState != "stable");
-      clientState.ignoringOffer = !clientState.polite && offerCollision;
-      //Leave if client is ignoring offers
-      if(clientState.ignoringOffer){
-        return;
-      }
-      //Set the remote description
-      await pc.setRemoteDescription(description);
-      //send an answer if it's an offer
-      if(description.type == "offer"){
-        console.log("It was an offer! Let me answer...");
-        await pc.setLocalDescription();
-        sigCh.emit("signal", {description: pc.localDescription});
-      }
-    }else if(candidate){
-      console.log('I just received a candidate...');
-      console.log(candidate);
-      await pc.addIceCandidate(candidate);
-    }
-  }catch(err){
-    console.error(err);
-  }
-}
-*/
-
-//Logic to send candidate
