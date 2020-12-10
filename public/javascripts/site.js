@@ -1,3 +1,251 @@
+//socket connection to the signaling channel
+//Listen for 'message' event on the signaling channel
+const sigCh = io('/' + NAMESPACE);
+sigCh.on('message', data => {
+  console.log(data);
+});
+
+// Track client states
+var clientState = {
+  makingOffer: false,
+  polite: false,
+  ignoringOffer: false
+}
+
+// peer connection
+var rtc_config = null;
+const pc = new RTCPeerConnection(rtc_config);
+
+// Set the placeholder for the data channel and game data channel
+var dc = null;
+var gdc = null;
+
+// Add DOM elements for the data channel
+const chatArea = document.querySelector('.chat-area');
+const chatForm = document.querySelector('.chat-form');
+const chatInput = document.querySelector('#chat-input');
+const chatBtn = document.querySelector('#chat-btn');
+const chatPopUp = document.querySelector('#chat-popup');
+const chatBox = document.querySelector('#togglechat');
+
+var chatBoxState = {
+  hidden: true
+}
+
+chatPopUp.addEventListener('click', function(event){
+  console.log("Someone click the chat button!");
+  //var chatBox = document.getElementById('#togglechat.chat-container');
+  if(chatBoxState.hidden){ //if the chatbox is hidden
+    //chatBox.hidden=false; //we display it
+    document.getElementById("togglechat").style.display = "block";
+    chatPopUp.innerText = "Hide Chat"
+    chatBoxState.hidden=false;
+  }else if(chatBoxState.hidden == false){
+    //chatBox.hidden = true;
+    document.getElementById("togglechat").style.display = "none";
+    chatBoxState.hidden=true;
+    chatPopUp.innerText = "Show Chat";
+  }
+});
+
+// A function to append message to the chat box chat box area
+function appendMsgToChatArea(area, msg, who) {
+  console.log('somebody sent message', msg)
+  var li = document.createElement('li');
+  var msg = document.createTextNode(msg);
+  li.className = who;
+  li.appendChild(msg);
+  area.appendChild(li);
+}
+
+// A function to listen for the data channel event
+function addDataChannelEventListener(datachannel) {
+  datachannel.onmessage = (e) => {
+    appendMsgToChatArea(chatArea, e.data, 'peer');
+  }
+
+  datachannel.onopen = () => {
+    chatInput.disabled = false;
+    chatBtn.disabled = false;
+  }
+
+  datachannel.onclose = () => {
+    chatInput.disabled = true;
+    chatBtn.disabled = true;
+  }
+
+  // Send chat messages from the self side
+  chatForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var msg = chatInput.value;
+    appendMsgToChatArea(chatArea, msg, 'self');
+    datachannel.send(msg);
+    chatInput.value = '';
+  })
+}
+
+// the polite client will open the data channel once the connection state become 'connected'
+pc.onconnectionstatechange = (e) => {
+  if(pc.connectionState == 'connected') {
+    if (clientState.polite) {
+      console.log('data channel starts');
+      dc = pc.createDataChannel('text chat');
+      gdc = pc.createDataChannel('game data');
+      addDataChannelEventListener(dc);
+      var g = new GameDataChannelEventListener(gdc)
+    }
+  }
+}
+
+// Listen for the data channel on the peer side
+pc.ondatachannel = (e) => {
+  if (e.channel.label == 'text chat') {
+    dc = e.channel;
+    addDataChannelEventListener(dc);
+  }
+    // Data channels can be distinguished by e.channel.label
+    // which would be `text chat` in this case. Use that to
+    // decide what to do with the channel that has opened
+    if (e.channel.label == 'game data') {
+      console.log('something happend in game channel')
+      var g = new GameDataChannelEventListener(e.channel)
+    }
+}
+
+// Set up media constrain
+const constraints = {video:true, audio:true}
+// Variable for checking video
+const checkedVideo = document.querySelector('#checked-video');
+// Variables for self video
+const selfVideo = document.querySelector('#self-video');
+var selfStream = new MediaStream();
+selfVideo.srcObject = selfStream;
+// Variables for remote video from the peer
+const remoteVideo = document.querySelector('#remote-video');
+var remoteStream = new MediaStream();
+remoteVideo.srcObject = remoteStream;
+
+// Handle the start of media streaming
+async function startStream(){
+  try{
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    for(var track of stream.getTracks()){
+      pc.addTrack(track);
+      //selfVideo.srcObject = selfStream.addTrack(track.track); --> Not working
+      //selfVideo.srcObject = track.track; --> Not working
+    }
+    //TODO: Handle selfVideo with tracks
+    selfVideo.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
+}
+
+// Handle received tracks by the RTCPeerConnection channel
+pc.ontrack = function(track) {
+  console.log("RECEIVED TRACK!");
+  remoteStream.addTrack(track.track);
+}
+
+// Buttons for startinf call and checking media
+const callButton = document.querySelector('#start-call');
+const checkMediaButton = document.querySelector('#check-media');
+//Listen for 'click' event
+callButton.addEventListener('click', startCall);
+checkMediaButton.addEventListener('click', checkMedia);
+
+async function checkMedia(){
+  try{
+    var stream = await navigator.mediaDevices.getUserMedia(constraints);
+    checkedVideo.srcObject = stream;
+    selfVideo.srcObject = stream;
+  }catch{
+    console.log('Error');
+  }
+}
+
+function startCall() {
+  console.log("I'm starting the call...");
+  callButton.hidden = true;
+  checkMediaButton.hidden = true;
+  clientState.polite = true;
+  sigCh.emit('game-on');
+  showGame();
+  startStream();
+  startNegotiation();
+}
+
+sigCh.on('game-on', function() {
+  console.log("Someone is calling me!");
+  console.log("Someone just joined the game room");
+  // Update the room status by showing the message
+  const roomStatusMsg = document.querySelector("#room-status-msg");
+  roomStatusMsg.innerText = "There is 1 person in the game room";
+  callButton.removeEventListener('click', startCall);
+  callButton.addEventListener('click', function(){
+    callButton.hidden = true;
+    checkMediaButton.removeEventListener('click', checkMedia);
+    checkMediaButton.hidden = true;
+    showGame();
+    startStream();
+    startNegotiation();
+  });
+});
+
+// Set up the peer connection
+async function startNegotiation() {
+  pc.onnegotiationneeded = async () => {
+    try {
+      console.log('making an offer...');
+      clientState.makingOffer = true;
+      await pc.setLocalDescription();
+      sigCh.emit('signal',{ description: pc.localDescription });
+    } catch(err) {
+      console.error(err);
+    } finally {
+      clientState.makingOffer = false;
+    }
+  }
+}
+
+sigCh.on('signal', async function({description, candidate}) {
+  try{
+    if(description) {
+      //console.log("I just received a description...");
+      const offerCollision = (description.type == 'offer') &&
+                             (clientState.makingOffer || pc.signalingState != "stable");
+
+      clientState.ignoringOffer = !clientState.polite && offerCollision;
+      //Leave if client is ignoring offers
+      if(clientState.ignoringOffer){
+        return;
+      }
+
+      //Set the remote description
+      await pc.setRemoteDescription(description);
+
+      //send an answer if it's an offer
+      if(description.type == 'offer'){
+        console.log("It was an offer! Let me answer...");
+        await pc.setLocalDescription();
+        sigCh.emit('signal', {description: pc.localDescription});
+      }
+    }else if(candidate){
+    //  console.log('I just received a candidate...');
+      //console.log(candidate);
+      await pc.addIceCandidate(candidate);
+    }
+  }catch(err){
+    console.error(err);
+  }
+});
+
+// Send candidate
+pc.onicecandidate = ({candidate}) => {
+  sigCh.emit('signal', {candidate:candidate});
+}
+
+/* GuessWho Game JS */
 var chosen;
 var start;
 var won;
@@ -130,129 +378,9 @@ window.addEventListener("click", function() {
     });
 }
 
-//generateGameboard();
-
-//socket connection to the signaling channel
-//between both peers
-const sigCh = io('/' + NAMESPACE);
-var rtc_config = null;
-const pc = new RTCPeerConnection(rtc_config);
-
-// Set the placeholder for the data channel
-var dc = null;
-var gdc= null;
-
-
-
-// Track client states
-var clientState = {
-  makingOffer: false,
-  polite: false,
-  ignoringOffer: false
-}
-
-// Add DOM elements for the data channel
-const chatArea = document.querySelector('.chat-area');
-const chatForm = document.querySelector('.chat-form');
-const chatInput = document.querySelector('#chat-input');
-const chatBtn = document.querySelector('#chat-btn');
-const chatPopUp = document.querySelector('#chat-popup');
-const chatBox = document.querySelector('#togglechat');
 var gameBoardSelect =  document.getElementById("game")
-
 var done = false;
-
-pc.onicecandidate = ({candidate}) => {
-  sigCh.emit('signal', {candidate:candidate});
-}
-
-
-var chatBoxState = {
-  hidden: true
-}
-
-chatPopUp.addEventListener('click', function(event){
-  console.log("Someone click the chat button!");
-  //var chatBox = document.getElementById('#togglechat.chat-container');
-  if(chatBoxState.hidden){ //if the chatbox is hidden
-    //chatBox.hidden=false; //we display it
-    document.getElementById("togglechat").style.display = "block";
-    chatPopUp.innerText = "Hide Chat"
-    chatBoxState.hidden=false;
-  }else if(chatBoxState.hidden == false){
-    //chatBox.hidden = true;
-    document.getElementById("togglechat").style.display = "none";
-    chatBoxState.hidden=true;
-    chatPopUp.innerText = "Show Chat";
-  }
-});
-
-// A function to append message to the chat box chat box area
-function appendMsgToChatArea(area, msg, who) {
-  console.log('somebody sent message', msg)
-  var li = document.createElement('li');
-  var msg = document.createTextNode(msg);
-  li.className = who;
-  li.appendChild(msg);
-  area.appendChild(li);
-}
-
 var opponentcard;
-
-// A function to listen for the data channel event
-function addDataChannelEventListener(datachannel) {
-  datachannel.onmessage = (e) => {
-    appendMsgToChatArea(chatArea, e.data, 'peer');
-  }
-
-  datachannel.onopen = () => {
-    chatInput.disabled = false;
-    chatBtn.disabled = false;
-  }
-
-  datachannel.onclose = () => {
-    chatInput.disabled = true;
-    chatBtn.disabled = true;
-  }
-
-  // Send chat messages from the self side
-  chatForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var msg = chatInput.value;
-    appendMsgToChatArea(chatArea, msg, 'self');
-    datachannel.send(msg);
-    chatInput.value = '';
-  })
-}
-
-// the polite client will open the data channel once the connection state become 'connected'
-pc.onconnectionstatechange = (e) => {
-  if(pc.connectionState == 'connected') {
-    if (clientState.polite) {
-      console.log('data channel starts');
-      dc = pc.createDataChannel('text chat');
-      gdc = pc.createDataChannel('game data');
-      addDataChannelEventListener(dc);
-      var g = new GameDataChannelEventListener(gdc)
-    }
-  }
-}
-
-// Listen for the data channel on the peer side
-pc.ondatachannel = (e) => {
-  if (e.channel.label == 'text chat') {
-    dc = e.channel;
-    addDataChannelEventListener(dc);
-  }
-    // Data channels can be distinguished by e.channel.label
-    // which would be `text chat` in this case. Use that to
-    // decide what to do with the channel that has opened
-    if (e.channel.label == 'game data') {
-      console.log('something happend in game channel')
-      var g = new GameDataChannelEventListener(e.channel)
-    }
-
-}
 
 function GameDataChannelEventListener(gamedata) {
 
@@ -262,7 +390,6 @@ function GameDataChannelEventListener(gamedata) {
     flip(opponentcard);
   //  appendMsgToChatArea(chatArea, e.data ,'peer');
   }
-
 
   //^send whatever you click on in ther
   // Send chat messages from the self side
@@ -279,48 +406,9 @@ function GameDataChannelEventListener(gamedata) {
 
 }
 
-// Variable for checking video
-const checkedVideo = document.querySelector('#checked-video');
-//Variables for self video
-const selfVideo = document.querySelector('#self-video');
-var selfStream = new MediaStream();
-selfVideo.srcObject = selfStream;
-
-// Variables for remote video from the peer
-const remoteVideo = document.querySelector('#remote-video');
-var remoteStream = new MediaStream();
-remoteVideo.srcObject = remoteStream;
-
-const callButton = document.querySelector('#start-call');
-const checkMediaButton = document.querySelector('#check-media');
-
-const constraints = {video:true, audio:true}
-
-
-//Listen for 'message' event on the signaling channel
-sigCh.on('message', data => {
-  console.log(data);
-});
-
-
-//Listen for 'click' event on the #start-stream button
-callButton.addEventListener('click', startCall);
-checkMediaButton.addEventListener('click', checkMedia);
-
 function alerttest(x){
   console.log("card selected");
   console.log("x");
-}
-
-function startCall() {
-  console.log("I'm starting the call...");
-  callButton.hidden = true;
-  checkMediaButton.hidden = true;
-  clientState.polite = true;
-  sigCh.emit('game-on');
-  showGame();
-  startStream();
-  startNegotiation();
 }
 
 var opponentschosen;
@@ -406,99 +494,4 @@ function showGame() {
   alert("Please choose a character card for the other player to guess.");
 }
 
-sigCh.on('game-on', function() {
-  console.log("Someone is calling me!");
-  console.log("Someone just joined the game room");
-  // Update the room status by showing the message
-  const roomStatusMsg = document.querySelector("#room-status-msg");
-  roomStatusMsg.innerText = "There is 1 person in the game room";
-  callButton.removeEventListener('click', startCall);
-  callButton.addEventListener('click', function(){
-    callButton.hidden = true;
-    checkMediaButton.removeEventListener('click', checkMedia);
-    checkMediaButton.hidden = true;
-    showGame();
-    startStream();
-    startNegotiation();
-  });
-});
-
-async function checkMedia(){
-  try{
-    var stream = await navigator.mediaDevices.getUserMedia(constraints);
-    checkedVideo.srcObject = stream;
-    selfVideo.srcObject = stream;
-  }catch{
-    console.log('Error');
-  }
-}
-
-async function startStream(){
-  try{
-    var stream = await navigator.mediaDevices.getUserMedia(constraints);
-    for(var track of stream.getTracks()){
-      pc.addTrack(track);
-      //selfVideo.srcObject = selfStream.addTrack(track.track); --> Not working
-      //selfVideo.srcObject = track.track; --> Not working
-    }
-    //TODO: Handle selfVideo with tracks
-    selfVideo.srcObject = stream;
-  }catch{
-    console.log('Error');
-  }
-}
-
-//Handle received tracks by the RTCPeerConnection channel
-pc.ontrack = function(track) {
-  console.log("RECEIVED TRACK!");
-  remoteStream.addTrack(track.track);
-}
-
-async function startNegotiation() {
-  pc.onnegotiationneeded = async () => {
-    try {
-      console.log('making an offer...');
-      clientState.makingOffer = true;
-      await pc.setLocalDescription();
-      sigCh.emit('signal',{ description: pc.localDescription });
-    } catch(err) {
-      console.error(err);
-    } finally {
-      clientState.makingOffer = false;
-    }
-  }
-}
-
 var g = new generateGameboard();
-
-sigCh.on('signal', async function({description, candidate}) {
-  try{
-    if(description) {
-      //console.log("I just received a description...");
-      const offerCollision = (description.type == 'offer') &&
-                             (clientState.makingOffer || pc.signalingState != "stable");
-
-      clientState.ignoringOffer = !clientState.polite && offerCollision;
-      //Leave if client is ignoring offers
-      if(clientState.ignoringOffer){
-        return;
-      }
-
-      //Set the remote description
-      await pc.setRemoteDescription(description);
-
-      //send an answer if it's an offer
-      if(description.type == 'offer'){
-        console.log("It was an offer! Let me answer...");
-        await pc.setLocalDescription();
-        sigCh.emit('signal', {description: pc.localDescription});
-      }
-    }else if(candidate){
-    //  console.log('I just received a candidate...');
-      //console.log(candidate);
-      await pc.addIceCandidate(candidate);
-    }
-  }catch(err){
-    console.error(err);
-  }
-});
