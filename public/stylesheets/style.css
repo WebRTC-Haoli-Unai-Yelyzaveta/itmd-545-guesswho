@@ -23,7 +23,6 @@ display: none;
   }
 
   button {
-    border-radius: 7px;
     font-size: 1.1em;
     padding:1%;
     background-color: #e16162;
@@ -47,6 +46,7 @@ display: none;
   /* main tag: video elements*/
   #content {
     display: none;
+    text-align: center;
   }
 
   .streams {
@@ -64,9 +64,9 @@ display: none;
 
   #self-video {
     position: absolute;
-    width: 30%;
-    bottom: 20px;
-    right: 15px;
+    width: 20%;
+    bottom: 12px;
+    right: 5px;
   }
 
   figcaption {
@@ -84,6 +84,17 @@ display: none;
     display:none;
     color: white;
     text-align: center;
+  }
+
+  /* scoreboard */
+  #scoreboard {
+    display: none;
+    margin: auto;
+  }
+
+  #score {
+    padding-bottom: 2px;
+    border-bottom: 1px solid #fff;
   }
 
   /* game-container */
@@ -181,6 +192,7 @@ display: none;
     width: 300px;
     overflow: hidden;
     display: none;
+    margin-bottom: 3em;
   }
 
   .chat-box {
@@ -382,15 +394,21 @@ display: none;
     grid-row: 2 / 3;
   }
 
+  #scoreboard {
+    grid-column: 1/4;
+    grid-row: 3/4;
+  }
+
   .chat-container {
     grid-column: 1 / 4;
-    grid-row: 3 / 4;
+    grid-row: 4 / 5;
+    margin: auto;
   }
 
 
   .game-container {
     grid-column: 4 / 13;
-    grid-row: 2 / 4;
+    grid-row: 2 / 5;
   }
 
   #choose {
@@ -405,10 +423,6 @@ display: none;
   .streams {
     width: 75%;
     max-width: 500px;
-  }
-
-  .chat-container {
-    margin: auto;
   }
 
   /* peer board */

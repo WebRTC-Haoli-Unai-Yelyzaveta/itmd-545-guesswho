@@ -30,8 +30,11 @@ block content
           id="remote-video"
           autoplay
         )
-
-  p#choose Please choose a character card for the other player to guess.
+    button#play-again Play again
+  div#scoreboard
+    p#score Score
+    p#myscore You: 0
+    p#peerscore Your opponent: 1
   div#game.game-container
     div.self-board
        div#gameboard.game-item
