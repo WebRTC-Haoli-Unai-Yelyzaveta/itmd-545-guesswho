@@ -95,7 +95,9 @@ pc.onconnectionstatechange = (e) => {
       dc = pc.createDataChannel('text chat');
       gdc = pc.createDataChannel('game data');
       addDataChannelEventListener(dc);
-      var g = new GuessWho(gdc);
+      var playerone=0;
+      var playertwo=0;
+      var g = new GuessWho(gdc, playerone, playertwo);
       // var g = new GameDataChannelEventListener(gdc)
     }
   }
@@ -113,7 +115,9 @@ pc.ondatachannel = (e) => {
     if (e.channel.label == 'game data') {
       console.log('something happend in game channel')
       gdc = e.channel;
-      var g = new GuessWho(gdc);
+      var playerone=0;
+      var playertwo=0;
+      var g = new GuessWho(gdc, playerone, playertwo);
       // var g = new GameDataChannelEventListener(e.channel)
     }
 }
@@ -177,6 +181,7 @@ function startCall() {
   clientState.polite = true;
   sigCh.emit('game-on');
   alert("Hello! Let me teach you how to play the game. You and the other player both have a hidden character. Ask the other player for clues in order to narrow down which character they have. As you narrow down your choices, click on the images to cross off possible characters.");
+
   showGame();
   startStream();
   startNegotiation();
@@ -255,7 +260,7 @@ pc.onicecandidate = ({candidate}) => {
 
 /* GuessWho Game JS */
 
-function GuessWho(gdc) {
+function GuessWho(gdc, playerone, playertwo) {
   var chosen;
   var start;
   var gamestate = "start";
@@ -268,7 +273,8 @@ function GuessWho(gdc) {
   var gameboard = document.getElementById('gameboard');
   var gameboard2 = document.getElementById("gameboard2");
   const charNameArr = ["CHANTAL","ERIC","ALEX","BOB","PAUL","FRANK","ZOE","JOE","BUBA","RITA","RICK","ANTOINE","JOHN","CHAP","EVELYN","LADY","LILLIAN","JENNY","JAVIER","EVAN","MATHIAS","MICHAEL","HANK","VITO"];
-
+//  myScore();
+//  peerScore();
   //create gameboard
   function generateGameboard() {
     console.log("yes, object here");
@@ -405,6 +411,10 @@ function GuessWho(gdc) {
     console.log("my guess " +myguess);
     if(myguess === opponentschosen){
       alert("Congrats, you won!");
+      playerone=playerone+1;
+      document.getElementById("myscore").innerHTML = "You: "+ playerone;
+      document.getElementById("peerscore").innerHTML = "Your Opponent: "+ playertwo;
+      console.log("myscore" + playerone);
       alert("Click play again to play the game again!");
       gamestate= "end";
       hideGameboard()
@@ -419,6 +429,10 @@ function GuessWho(gdc) {
     console.log("yes, click heard");
       if(oppwon=== "yes") {
         alert("Your opponent won!");
+        playertwo=playertwo+1;
+        document.getElementById("myscore").innerHTML = "You: "+ playerone;
+        document.getElementById("peerscore").innerHTML = "Your Opponent: "+ playertwo;
+        console.log("peerscore" + playertwo);
         alert("Click play again to play the game again!");
         hideGameboard()
       }
@@ -442,11 +456,13 @@ function GuessWho(gdc) {
     document.getElementById("guess").removeEventListener("click", showGuessForm);
     gamestate = "start";
     showGame();
-    var g = new GuessWho(gdc);
+    var g = new GuessWho(gdc, playerone, playertwo);
   }
   // Call this function when the game starts
   generateGameboard();
 }
+
+
 
 function showGame() {
   // Get a MediaQueryList object
