@@ -294,7 +294,7 @@ function GuessWho(gdc) {
         if(firstTime) {
           firstTime = false;
           chosen= charNameArr[i];
-          document.getElementById("y").style.display = "block";
+          document.querySelector("#guesscontain").style.display = "flex";
           document.getElementById("y").src=`https://robohash.org/${charNameArr[i]}?set=set4`;
           document.getElementById("y").style.display = "block";
           document.getElementById("name").innerHTML = chosen;
@@ -344,7 +344,7 @@ function GuessWho(gdc) {
   gameBoardSelect.addEventListener('click', function(e) {
     e.preventDefault();
     var msg = cardclicked + " " +chosen;
-    if(gamestate==="end"){
+    if(gamestate == "end"){
       msg = "end"
     }
     gdc.send(msg);
@@ -379,12 +379,16 @@ function GuessWho(gdc) {
     }
   }
 
-  document.getElementById("guess").addEventListener("click", function() {
+  document.getElementById("guess").addEventListener("click", showGuessForm);
+
+  function showGuessForm() {
     document.getElementById("sub").style.display = "block";
     document.getElementById("subtext").style.display = "block";
-  });
+  }
 
-  document.getElementById("sub").addEventListener("click", function() {
+  document.getElementById("sub").addEventListener("click", guessCard);
+
+  function guessCard() {
     var myguess= document.getElementById("subtext").value;
     console.log("my guess " +myguess);
     if(myguess === opponentschosen){
@@ -394,12 +398,18 @@ function GuessWho(gdc) {
       // Hide the game board
       document.getElementById("game").style.display = "none";
       document.getElementById("gameboard").style.display = "none";
+      document.getElementById("subtext").value = "";
+      document.getElementById("sub").style.display = "none";
+      document.getElementById("subtext").style.display = "none";
+      document.querySelector("#guesscontain").style.display = "none";
     } else {
       alert("Sorry...that's incorrect");
     }
-  });
+  }
 
-  window.addEventListener("click", function() {
+  window.addEventListener("click", MsgForLoser);
+
+  function MsgForLoser() {
     console.log("yes, click heard");
       if(oppwon=== "yes") {
         alert("Your opponent won!");
@@ -407,28 +417,32 @@ function GuessWho(gdc) {
         // Hide the game board
         document.getElementById("game").style.display = "none";
         document.getElementById("gameboard").style.display = "none";
+        document.getElementById("sub").style.display = "none";
+        document.getElementById("subtext").style.display = "none";
+        document.querySelector("#guesscontain").style.display = "none";
       }
       oppwon="no";
-  });
+  }
 
   // Setting the game to its initial state when the button clicks
-  document.querySelector("#play-again").addEventListener("click", function() {
+  document.querySelector("#play-again").addEventListener("click", restartGame);
+
+  function restartGame() {
     while (gameboard.firstChild) {
       gameboard.removeChild(gameboard.firstChild);
     }
     while (gameboard2.firstChild) {
       gameboard2.removeChild(gameboard2.firstChild);
     }
-    console.log("Remove child elements")
-    // Remove addEventListener to avoid being trigger by other clicked buttons
-    // window.removeEventListener("click", MsgForLoser);
-    console.log("Remove window Click");
+    // Remove addEventListener to avoid triggering twice
+    window.removeEventListener("click", MsgForLoser);
+    document.getElementById("sub").removeEventListener("click", guessCard);
+    document.querySelector("#play-again").removeEventListener("click", restartGame);
+    document.getElementById("guess").removeEventListener("click", showGuessForm);
     gamestate = "start";
-    console.log(gamestate);
-    console.log(oppwon)
     showGame();
     var g = new GuessWho(gdc);
-  })
+  }
   // Call this function when the game starts
   generateGameboard();
 }
