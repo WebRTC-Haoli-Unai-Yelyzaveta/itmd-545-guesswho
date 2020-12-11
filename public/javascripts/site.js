@@ -339,6 +339,16 @@ function GuessWho(gdc) {
     }
   }
 
+  function hideGameboard() {
+    // Hide the game board
+    document.getElementById("game").style.display = "none";
+    document.getElementById("gameboard").style.display = "none";
+    document.getElementById("sub").style.display = "none";
+    document.getElementById("subtext").value = "";
+    document.getElementById("subtext").style.display = "none";
+    document.querySelector("#guesscontain").style.display = "none";
+  }
+
   //^send whatever you click on in ther
   // Send chat messages from the self side
   gameBoardSelect.addEventListener('click', function(e) {
@@ -349,7 +359,6 @@ function GuessWho(gdc) {
     }
     gdc.send(msg);
   })
-
 
   gdc.onmessage = (e) => {
     msg = e.data;
@@ -411,15 +420,6 @@ function GuessWho(gdc) {
         hideGameboard()
       }
       oppwon="no";
-  }
-
-  function hideGameboard() {
-    // Hide the game board
-    document.getElementById("game").style.display = "none";
-    document.getElementById("gameboard").style.display = "none";
-    document.getElementById("sub").style.display = "none";
-    document.getElementById("subtext").style.display = "none";
-    document.querySelector("#guesscontain").style.display = "none";
   }
 
   // Setting the game to its initial state when the button clicks
