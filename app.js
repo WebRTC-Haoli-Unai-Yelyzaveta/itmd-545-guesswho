@@ -8,22 +8,7 @@ const logger = require('morgan');
 const io = require('socket.io')();
 const roomNamespace = io.of(/^\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/);
 const indexRouter = require('./routes/index');
-
 const app = express();
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-
 
 roomNamespace.on('connection', socket => {
   //roomSocket is only going to be used for diagnosis
@@ -48,6 +33,16 @@ roomNamespace.on('connection', socket => {
   });
 });
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
