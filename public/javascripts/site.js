@@ -395,13 +395,7 @@ function GuessWho(gdc) {
       alert("Congrats, you won!");
       alert("Click play again to play the game again!");
       gamestate= "end";
-      // Hide the game board
-      document.getElementById("game").style.display = "none";
-      document.getElementById("gameboard").style.display = "none";
-      document.getElementById("subtext").value = "";
-      document.getElementById("sub").style.display = "none";
-      document.getElementById("subtext").style.display = "none";
-      document.querySelector("#guesscontain").style.display = "none";
+      hideGameboard()
     } else {
       alert("Sorry...that's incorrect");
     }
@@ -414,14 +408,18 @@ function GuessWho(gdc) {
       if(oppwon=== "yes") {
         alert("Your opponent won!");
         alert("Click play again to play the game again!");
-        // Hide the game board
-        document.getElementById("game").style.display = "none";
-        document.getElementById("gameboard").style.display = "none";
-        document.getElementById("sub").style.display = "none";
-        document.getElementById("subtext").style.display = "none";
-        document.querySelector("#guesscontain").style.display = "none";
+        hideGameboard()
       }
       oppwon="no";
+  }
+
+  function hideGameboard() {
+    // Hide the game board
+    document.getElementById("game").style.display = "none";
+    document.getElementById("gameboard").style.display = "none";
+    document.getElementById("sub").style.display = "none";
+    document.getElementById("subtext").style.display = "none";
+    document.querySelector("#guesscontain").style.display = "none";
   }
 
   // Setting the game to its initial state when the button clicks
