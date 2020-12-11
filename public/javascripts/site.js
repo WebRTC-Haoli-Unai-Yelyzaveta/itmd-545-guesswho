@@ -5,6 +5,8 @@ sigCh.on('message', data => {
   console.log(data);
 });
 
+
+
 // Track client states
 var clientState = {
   makingOffer: false,
@@ -27,6 +29,7 @@ const chatInput = document.querySelector('#chat-input');
 const chatBtn = document.querySelector('#chat-btn');
 const chatPopUp = document.querySelector('#chat-popup');
 const chatBox = document.querySelector('#togglechat');
+
 
 var chatBoxState = {
   hidden: true
