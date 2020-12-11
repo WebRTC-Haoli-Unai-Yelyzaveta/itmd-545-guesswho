@@ -261,7 +261,6 @@ pc.onicecandidate = ({candidate}) => {
 /* GuessWho Game JS */
 
 function GuessWho(gdc, playerone, playertwo) {
-  var test;
   var chosen;
   var start;
   var gamestate = "start";
@@ -324,7 +323,6 @@ function GuessWho(gdc, playerone, playertwo) {
        }
       });
     }
-    test=10;
   }
 
   function setIndex(index){
